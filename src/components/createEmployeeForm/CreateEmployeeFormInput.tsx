@@ -1,14 +1,10 @@
-import {
-  Control,
-  Controller,
-  ControllerRenderProps,
-  FieldErrors,
-} from "react-hook-form";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 
 import { CreateEmployeeFormData } from "./CreateEmployeeForm";
 import { formatLabelToKebabCase } from "../../utils/utils";
+import CreateEmployeeFormInputBody from "./CreateEmployeeFormInputBody";
 
-type CreateEmployeeFormInputProps =
+export type CreateEmployeeFormInputProps =
   | {
       name: "state" | "department";
       label: string;
@@ -31,19 +27,7 @@ type CreateEmployeeFormInputProps =
       errors: FieldErrors<CreateEmployeeFormData>;
     };
 
-type BodyProps = {
-  inputType: "select" | "text" | "date";
-  options?: { label: string; value: string }[];
-  errors: FieldErrors<CreateEmployeeFormData>;
-  id: string;
-  name: CreateEmployeeFormInputProps["name"];
-  field: ControllerRenderProps<
-    CreateEmployeeFormData,
-    CreateEmployeeFormInputProps["name"]
-  >;
-};
-
-export default function CreateEmployeeFormTextInput({
+export default function CreateEmployeeFormInput({
   name,
   label,
   control,
@@ -67,7 +51,7 @@ export default function CreateEmployeeFormTextInput({
         control={control}
         rules={{ required: `${label} is required` }}
         render={({ field }) => (
-          <Body
+          <CreateEmployeeFormInputBody
             errors={errors}
             options={options}
             field={field}
@@ -79,36 +63,5 @@ export default function CreateEmployeeFormTextInput({
       />
       {errors[name] && <p className="text-red-500">{errors[name]?.message}</p>}
     </div>
-  );
-}
-
-function Body({ errors, options, inputType, field, id, name }: BodyProps) {
-  if (inputType === "select" && options) {
-    return (
-      <select
-        id={id}
-        required
-        className={`border rounded-md ${
-          errors[name] ? "border-red-500" : "border-gray-300"
-        } p-2`}
-        {...field}>
-        {options.map(({ value, label }, index) => (
-          <option key={index} value={value}>
-            {label}
-          </option>
-        ))}
-      </select>
-    );
-  }
-  return (
-    <input
-      type={inputType}
-      id={id}
-      required
-      className={`border rounded-md ${
-        errors[name] ? "border-red-500" : "border-gray-300"
-      } p-2`}
-      {...field}
-    />
   );
 }
