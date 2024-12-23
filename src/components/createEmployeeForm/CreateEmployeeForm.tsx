@@ -1,13 +1,15 @@
 import { useForm } from "react-hook-form";
 
 import Separator from "../Separator";
-import CreateEmployeeFormInput from "./CreateEmployeeFormInput";
+import CreateEmployeeFormInputText from "./CreateEmployeeFormInputText";
+import CreateEmployeeFormInputSelect from "./CreateEmployeeFormInputSelect";
+import CreateEmployeeFormInputDate from "./CreateEmployeeFormInputDate";
 
 export type CreateEmployeeFormData = {
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
-  startDate: string;
+  dateOfBirth: Date;
+  startDate: Date;
   street: string;
   city: string;
   state: string;
@@ -33,13 +35,13 @@ export default function CreateEmployeeForm(): React.ReactElement {
       className="space-y-4 flex flex-col gap-6">
       <fieldset className="space-y-4">
         <div className="flex flex-col md:flex-row gap-4">
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputText
             name="firstName"
             label="First Name"
             control={control}
             errors={errors}
           />
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputText
             name="lastName"
             label="Last Name"
             control={control}
@@ -48,13 +50,13 @@ export default function CreateEmployeeForm(): React.ReactElement {
         </div>
 
         <div className="flex flex-col gap-4">
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputDate
             name="dateOfBirth"
             label="Date Of Birth"
             control={control}
             errors={errors}
           />
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputDate
             name="startDate"
             label="Start Date"
             control={control}
@@ -67,13 +69,13 @@ export default function CreateEmployeeForm(): React.ReactElement {
       <fieldset className="space-y-4 ">
         <legend className="text-gray-800 font-semibold">Address</legend>
         <div className="flex flex-col md:flex-row gap-4">
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputText
             name="street"
             label="Street"
             control={control}
             errors={errors}
           />
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputText
             name="city"
             label="City"
             control={control}
@@ -81,14 +83,14 @@ export default function CreateEmployeeForm(): React.ReactElement {
           />
         </div>
         <div className="flex flex-col md:flex-row gap-4">
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputSelect
             name="state"
             label="State"
             control={control}
             errors={errors}
             options={states}
           />
-          <CreateEmployeeFormInput
+          <CreateEmployeeFormInputText
             name="zipCode"
             label="Zip Code"
             control={control}
@@ -99,7 +101,7 @@ export default function CreateEmployeeForm(): React.ReactElement {
       <Separator />
 
       <fieldset className="space-y-4 ">
-        <CreateEmployeeFormInput
+        <CreateEmployeeFormInputSelect
           name="department"
           label="Department"
           control={control}
@@ -118,7 +120,6 @@ export default function CreateEmployeeForm(): React.ReactElement {
 }
 
 const states: { value: string; label: string }[] = [
-  { value: "", label: "Select a state" },
   {
     label: "Alabama",
     value: "AL",
@@ -358,7 +359,6 @@ const states: { value: string; label: string }[] = [
 ];
 
 const departments: { value: string; label: string }[] = [
-  { value: "", label: "Select a department" },
   { value: "sales", label: "Sales" },
   { value: "marketing", label: "Marketing" },
   { value: "engineering", label: "Engineering" },
