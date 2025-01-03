@@ -1,6 +1,8 @@
-import { format, isValid, parse } from "date-fns";
+import { format } from "date-fns";
 import { useRef, useState } from "react";
+
 import DatePickerCalendar from "./DatePickerCalendar";
+import { handleDate } from "../../utils/datePicker";
 
 type DatePickerProps = {
   selectedDate: Date | null;
@@ -45,18 +47,32 @@ export default function DatePicker({
     ) {
       return;
     }
-    handleToggleCalendar();
+    setIsCalendarOpen(false);
   }
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    setInputValue(value);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const sanitizedValue = value.replace(/[^0-9]/g, "");
 
-    const parsedDate = parse(value, "dd/MM/yyyy", new Date());
-    if (isValid(parsedDate)) {
-      onDateChange(parsedDate);
-    }
-  }
+    const day = sanitizedValue.slice(0, 2).trim();
+    const month = sanitizedValue.slice(2, 4).trim();
+    const year = sanitizedValue.slice(4, 8).trim();
+
+    // Format automatique
+    const formattedValue = `${
+      day === "" ? "dd" : handleDate(day, month, year)
+    }/${month === "" ? "mm" : month}/${year === "" ? "yyyy" : year}`;
+
+    setInputValue(formattedValue);
+
+    // // Valider la date complète
+    // if (formattedValue.length === 10) {
+    //   const parsedDate = parse(formattedValue, "dd/MM/yyyy", new Date());
+    //   if (isValid(parsedDate)) {
+    //     onDateChange(parsedDate);
+    //   }
+    // }
+  };
 
   function handleCalendarChange(date: Date) {
     setInputValue(format(date, "dd/MM/yyyy"));
@@ -73,6 +89,7 @@ export default function DatePicker({
         onChange={handleInputChange}
         onFocus={handleToggleCalendar}
         className="border rounded-md border-gray-300 p-2 flex-1"
+        placeholder="dd/mm/yyyy"
       />
 
       {isCalendarOpen && (

@@ -10,6 +10,7 @@ import {
   addDays,
   isSameDay,
 } from "date-fns";
+import { ChevronLeft, ChevronRight, House } from "lucide-react";
 
 type DatePickerCalendarProps = {
   selectedDate: Date | null;
@@ -22,12 +23,10 @@ export default function DatePickerCalendar({
 }: DatePickerCalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Gestion de la navigation
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
 
-  // Génération des jours du calendrier
-  const generateCalendarDays = () => {
+  function generateCalendarDays() {
     const startDate = startOfWeek(startOfMonth(currentMonth));
     const endDate = endOfWeek(endOfMonth(currentMonth));
     const days = [];
@@ -39,7 +38,7 @@ export default function DatePickerCalendar({
     }
 
     return days;
-  };
+  }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const days = useMemo(() => generateCalendarDays(), [currentMonth]);
@@ -48,20 +47,20 @@ export default function DatePickerCalendar({
     <div className="w-66 border rounded-lg p-4">
       {/* En-tête du calendrier */}
       <div className="flex justify-between items-center mb-4">
-        <button
-          type="button"
-          onClick={prevMonth}
-          className="text-gray-600 hover:text-black">
-          &lt;
+        <button type="button" onClick={prevMonth}>
+          <ChevronLeft className="text-gray-600 hover:text-black cursor-pointer" />
         </button>
-        <h2 className="text-lg font-semibold">
-          {format(currentMonth, "MMMM yyyy")}
-        </h2>
-        <button
-          type="button"
-          onClick={nextMonth}
-          className="text-gray-600 hover:text-black">
-          &gt;
+        <button type="button" className="flex gap-4 items-center">
+          <House
+            onClick={() => onDateChange(new Date())}
+            className="text-gray-600 hover:text-black cursor-pointer"
+          />
+          <p className="text-lg font-semibold">
+            {format(currentMonth, "MMMM yyyy")}
+          </p>
+        </button>
+        <button type="button" onClick={nextMonth}>
+          <ChevronRight className="text-gray-600 hover:text-black cursor-pointer" />
         </button>
       </div>
 
