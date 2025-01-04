@@ -94,7 +94,11 @@ export default function DatePicker({
 
     if (event.key === "ArrowLeft") {
       handleFixFormat();
-      if (position >= 3 && position <= 5) {
+      if (position >= 0 && position <= 1) {
+        setTimeout(() => {
+          inputRef.current?.setSelectionRange(6, 10); // Select year
+        }, 0);
+      } else if (position >= 3 && position <= 5) {
         setTimeout(() => {
           inputRef.current?.setSelectionRange(0, 2); // Select day
         }, 0);
@@ -114,16 +118,22 @@ export default function DatePicker({
         setTimeout(() => {
           inputRef.current?.setSelectionRange(6, 10); // Select year
         }, 0);
+      } else if (position >= 6) {
+        setTimeout(() => {
+          inputRef.current?.setSelectionRange(0, 2); // Select day
+        }, 0);
       }
       event.preventDefault();
     } else if (event.key === "Escape") {
       inputRef.current?.blur();
     } else if (event.key === "Enter") {
+      event.preventDefault();
       handleFixFormat();
       const parsed = parse(inputValue, "dd/MM/yyyy", new Date());
       onDateChange(parsed);
-      inputRef.current?.blur();
-      event.preventDefault();
+      setTimeout(() => {
+        inputRef.current?.blur();
+      }, 0);
     } else if (!/[0-9]/.test(event.key) && event.key !== "Backspace") {
       event.preventDefault();
     }

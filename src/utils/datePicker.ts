@@ -43,5 +43,3 @@ export function handleCalendarMonth(month: string) {
   }
   return month;
 }
-
-// export function handleCheckDate(date: string) {}
