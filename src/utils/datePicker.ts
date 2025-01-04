@@ -1,6 +1,8 @@
-export function handleDate(day: string, month: string, year: string) {
+export function handleCalendarDate(day: string, month: string, year: string) {
   let dayMaxValue = 31;
-  if (month !== "") {
+  const isEmptyMonth = month === "" || month === "mm";
+  const isEmptyDay = day === "" || day === "dd";
+  if (!isEmptyMonth) {
     const numericMonth = parseInt(month);
 
     if ([4, 6, 9, 11].includes(numericMonth)) {
@@ -15,14 +17,31 @@ export function handleDate(day: string, month: string, year: string) {
       dayMaxValue = isLeapYear ? 29 : 28;
     }
   }
-  if (day !== "") {
+
+  if (!isEmptyDay) {
     const numericDay = parseInt(day);
     const numericFirstPart = parseInt(day[0]);
-    if (numericFirstPart > 3) {
+    if ((month === "02" && numericFirstPart > 2) || numericFirstPart > 3) {
       return `0${numericFirstPart}`;
-    } else if (numericDay > dayMaxValue) {
+    }
+    if (numericDay > dayMaxValue) {
       return dayMaxValue.toString();
     }
-    return day;
   }
+  return day;
 }
+
+export function handleCalendarMonth(month: string) {
+  const monthMaxValue = 12;
+  const isEmptyMonth = month === "" || month === "mm";
+  if (!isEmptyMonth) {
+    const numericMonth = parseInt(month);
+    const numericFirstPart = parseInt(month[0]);
+
+    if (numericFirstPart > 1) return `0${numericFirstPart}`;
+    if (numericMonth > monthMaxValue) return monthMaxValue.toString();
+  }
+  return month;
+}
+
+// export function handleCheckDate(date: string) {}

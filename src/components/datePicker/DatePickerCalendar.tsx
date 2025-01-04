@@ -21,7 +21,7 @@ export default function DatePickerCalendar({
   selectedDate,
   onDateChange,
 }: DatePickerCalendarProps) {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
 
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
   const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));

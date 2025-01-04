@@ -1,8 +1,11 @@
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import { useRef, useState } from "react";
 
 import DatePickerCalendar from "./DatePickerCalendar";
-import { handleDate } from "../../utils/datePicker";
+import {
+  handleCalendarDate,
+  handleCalendarMonth,
+} from "../../utils/datePicker";
 
 type DatePickerProps = {
   selectedDate: Date | null;
@@ -47,32 +50,114 @@ export default function DatePicker({
     ) {
       return;
     }
+    const originalDate = selectedDate ? format(selectedDate, "dd/MM/yyyy") : "";
+    if (originalDate !== inputValue) {
+      setInputValue(originalDate);
+    }
     setIsCalendarOpen(false);
   }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
-    const sanitizedValue = value.replace(/[^0-9]/g, "");
+    const sanitizedValue = value.replace(/[^0-9/]/g, "");
+    const [day, month, year] = sanitizedValue.split("/");
 
-    const day = sanitizedValue.slice(0, 2).trim();
-    const month = sanitizedValue.slice(2, 4).trim();
-    const year = sanitizedValue.slice(4, 8).trim();
-
-    // Format automatique
-    const formattedValue = `${
-      day === "" ? "dd" : handleDate(day, month, year)
-    }/${month === "" ? "mm" : month}/${year === "" ? "yyyy" : year}`;
+    const formattedValue = [
+      handleCalendarDate(day, month, year),
+      handleCalendarMonth(month),
+      year,
+    ].join("/");
 
     setInputValue(formattedValue);
+  }
 
-    // // Valider la date complète
-    // if (formattedValue.length === 10) {
-    //   const parsedDate = parse(formattedValue, "dd/MM/yyyy", new Date());
-    //   if (isValid(parsedDate)) {
-    //     onDateChange(parsedDate);
-    //   }
-    // }
-  };
+  function handleFixFormat() {
+    const value = inputValue;
+    const sanitizedValue = value.replace(/[^0-9/_]/g, "");
+    const [day, month, year] = sanitizedValue.split("/");
+    const [currentDay, currentMonth, currentYear] = format(
+      new Date(),
+      "dd/MM/yyyy"
+    ).split("/");
+
+    const formattedValue = [
+      day.length === 0 ? currentDay : day.padStart(2, "0"),
+      month.length === 0 ? currentMonth : month.padStart(2, "0"),
+      year.length === 0 ? currentYear : year.padEnd(4, "0"),
+    ].join("/");
+
+    setInputValue(formattedValue);
+  }
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    const position = inputRef.current?.selectionStart || 0;
+
+    if (event.key === "ArrowLeft") {
+      handleFixFormat();
+      if (position >= 3 && position <= 5) {
+        setTimeout(() => {
+          inputRef.current?.setSelectionRange(0, 2); // Select day
+        }, 0);
+      } else if (position >= 6) {
+        setTimeout(() => {
+          inputRef.current?.setSelectionRange(3, 5); // Select month
+        }, 0);
+      }
+      event.preventDefault();
+    } else if (event.key === "ArrowRight") {
+      handleFixFormat();
+      if (position >= 0 && position <= 1) {
+        setTimeout(() => {
+          inputRef.current?.setSelectionRange(3, 5); // Select month
+        }, 0);
+      } else if (position >= 3 && position <= 5) {
+        setTimeout(() => {
+          inputRef.current?.setSelectionRange(6, 10); // Select year
+        }, 0);
+      }
+      event.preventDefault();
+    } else if (event.key === "Escape") {
+      inputRef.current?.blur();
+    } else if (event.key === "Enter") {
+      handleFixFormat();
+      const parsed = parse(inputValue, "dd/MM/yyyy", new Date());
+      onDateChange(parsed);
+      inputRef.current?.blur();
+      event.preventDefault();
+    } else if (!/[0-9]/.test(event.key) && event.key !== "Backspace") {
+      event.preventDefault();
+    }
+  }
+
+  function handleFocus() {
+    const position = inputRef.current?.selectionStart || 0;
+
+    if (inputValue === "") {
+      setInputValue(format(new Date(), "dd/MM/yyyy"));
+      // Start
+      setTimeout(() => {
+        inputRef.current?.setSelectionRange(0, 2);
+      }, 0);
+    } else if (position >= 0 && position <= 1) {
+      handleFixFormat();
+      // Day
+      setTimeout(() => {
+        inputRef.current?.setSelectionRange(0, 2);
+      }, 0);
+    } else if (position >= 2 && position <= 4) {
+      handleFixFormat();
+      // Month
+      setTimeout(() => {
+        inputRef.current?.setSelectionRange(3, 5);
+      }, 0);
+    } else if (position >= 5) {
+      handleFixFormat();
+      // Year
+      setTimeout(() => {
+        inputRef.current?.setSelectionRange(6, 10);
+      }, 0);
+    }
+  }
 
   function handleCalendarChange(date: Date) {
     setInputValue(format(date, "dd/MM/yyyy"));
@@ -87,9 +172,15 @@ export default function DatePicker({
         type="text"
         value={inputValue}
         onChange={handleInputChange}
-        onFocus={handleToggleCalendar}
+        onFocus={() => {
+          handleFocus();
+          handleToggleCalendar();
+        }}
+        onClick={handleFocus}
+        onKeyDown={handleKeyDown}
         className="border rounded-md border-gray-300 p-2 flex-1"
         placeholder="dd/mm/yyyy"
+        maxLength={10}
       />
 
       {isCalendarOpen && (
