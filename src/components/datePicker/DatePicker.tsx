@@ -26,9 +26,10 @@ export default function DatePicker({
   const calendarRef = useRef<HTMLDivElement>(null);
 
   /** Open calendar adjusting the position */
-  function handleToggleCalendar() {
-    setIsCalendarOpen((prev) => !prev);
+  function handleOpenCalendar() {
+    if (isCalendarOpen) return;
 
+    setIsCalendarOpen(true);
     if (inputRef.current) {
       const rect = inputRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
@@ -123,11 +124,13 @@ export default function DatePicker({
 
     if (inputValue === "") {
       setInputValue(format(new Date(), "dd/MM/yyyy"));
-      handleDateNavigation(0, "current");
+      setTimeout(() => {
+        inputRef.current?.setSelectionRange(0, 2);
+      }, 0);
     } else {
       handleDateNavigation(position, "current");
     }
-    setIsCalendarOpen(true);
+    handleOpenCalendar();
   }
 
   /** Update Date on click on Calendar component date */
@@ -185,10 +188,7 @@ export default function DatePicker({
         type="text"
         value={inputValue}
         onChange={handleDateInputChange}
-        onFocus={() => {
-          handleFocus();
-          handleToggleCalendar();
-        }}
+        onFocus={handleFocus}
         onClick={handleFocus}
         onKeyDown={handleKeyDown}
         className="border rounded-md border-gray-300 p-2 flex-1"
