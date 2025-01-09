@@ -44,22 +44,23 @@ export default function DatePickerCalendar({
   const days = useMemo(() => generateCalendarDays(), [currentMonth]);
 
   return (
-    <div className="w-66 border rounded-lg p-4">
+    <div data-testid="calendar" className="w-66 border rounded-lg p-4">
       {/* En-tête du calendrier */}
       <div className="flex justify-between items-center mb-4">
-        <button type="button" onClick={prevMonth}>
+        <button type="button" name="previous" onClick={prevMonth}>
           <ChevronLeft className="text-gray-600 hover:text-black cursor-pointer" />
         </button>
-        <button type="button" className="flex gap-4 items-center">
-          <House
-            onClick={() => onDateChange(new Date())}
-            className="text-gray-600 hover:text-black cursor-pointer"
-          />
+        <button
+          type="button"
+          onClick={() => onDateChange(new Date())}
+          name="today"
+          className="flex gap-4 items-center">
+          <House className="text-gray-600 hover:text-black cursor-pointer" />
           <p className="text-lg font-semibold">
             {format(currentMonth, "MMMM yyyy")}
           </p>
         </button>
-        <button type="button" onClick={nextMonth}>
+        <button type="button" name="next" onClick={nextMonth}>
           <ChevronRight className="text-gray-600 hover:text-black cursor-pointer" />
         </button>
       </div>
