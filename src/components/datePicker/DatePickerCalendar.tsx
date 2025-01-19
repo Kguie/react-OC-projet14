@@ -20,7 +20,7 @@ type DatePickerCalendarProps = {
 export default function DatePickerCalendar({
   selectedDate,
   onDateChange,
-}: DatePickerCalendarProps) {
+}: DatePickerCalendarProps): React.ReactElement {
   const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
 
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
@@ -44,7 +44,7 @@ export default function DatePickerCalendar({
   const days = useMemo(() => generateCalendarDays(), [currentMonth]);
 
   return (
-    <div data-testid="calendar" className="w-66 border rounded-lg p-4">
+    <div data-testid="calendar" className="w-66 max-h-96 border rounded-lg p-4">
       {/* En-tête du calendrier */}
       <div className="flex justify-between items-center mb-4">
         <button type="button" name="previous" onClick={prevMonth}>

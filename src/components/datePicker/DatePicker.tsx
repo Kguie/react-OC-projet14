@@ -15,7 +15,7 @@ type DatePickerProps = {
 export default function DatePicker({
   selectedDate,
   onDateChange,
-}: DatePickerProps) {
+}: DatePickerProps): React.ReactElement {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [inputValue, setInputValue] = useState(
     selectedDate ? format(selectedDate, "dd/MM/yyyy") : ""
@@ -35,7 +35,7 @@ export default function DatePicker({
       const spaceBelow = window.innerHeight - rect.bottom;
       const spaceAbove = rect.top;
 
-      if (spaceBelow < 300 && spaceAbove > 300) {
+      if (spaceBelow < 384 && spaceAbove > 384) {
         setPosition("top");
       } else {
         setPosition("bottom");

@@ -10,7 +10,11 @@ export default function PageCard({
   width,
 }: PageCardProps): React.ReactElement {
   const widthClass =
-    width === "lg" ? "md:w-10/12" : width === "md" ? "md:w-8/12" : "md:w-6/12";
+    width === "lg"
+      ? "md:w-10/12"
+      : width === "md"
+      ? "md:w-8/12"
+      : "md:w-6/12 max-w-2xl";
 
   return (
     <main

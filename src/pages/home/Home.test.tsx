@@ -12,7 +12,7 @@ describe("Page Home", () => {
 
     // Check for 7 input elements
     const inputs = screen.getAllByRole("textbox");
-    expect(inputs).toHaveLength(7);
+    expect(inputs).toHaveLength(9);
 
     // Check for a button
     const button = screen.getByRole("button");

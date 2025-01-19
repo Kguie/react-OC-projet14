@@ -2,6 +2,7 @@ import { Control, Controller, FieldErrors } from "react-hook-form";
 
 import { CreateEmployeeFormData } from "./CreateEmployeeForm";
 import { formatLabelToKebabCase } from "../../utils/utils";
+import DropdownMenu from "../dropdownMenu/DropdownMenu";
 
 export type CreateEmployeeFormTextInputProps = {
   name: "state" | "department";
@@ -29,19 +30,11 @@ export default function CreateEmployeeFormTextInput({
         control={control}
         rules={{ required: `${label} is required` }}
         render={({ field }) => (
-          <select
-            id={kebabCaseLabel}
-            required
-            className={`border rounded-md ${
-              errors[name] ? "border-red-500" : "border-gray-300"
-            } p-2`}
-            {...field}>
-            {options.map(({ value, label }, index) => (
-              <option key={index} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+          <DropdownMenu
+            selected={field.value}
+            onSelect={field.onChange}
+            options={options}
+          />
         )}
       />
       {errors[name] && <p className="text-red-500">{errors[name]?.message}</p>}
