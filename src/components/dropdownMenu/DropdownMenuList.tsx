@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+
 import { DropdownMenuOption } from "./DropdownMenu";
 
 type DropdownMenuListProps = {
@@ -13,20 +14,16 @@ export default function DropdownMenuList({
   options,
 }: DropdownMenuListProps): React.ReactElement {
   const listRef = useRef<HTMLUListElement>(null);
-  const [selectedIndex, setSelectedIndex] = useState<number>(
-    selected ? options.findIndex((option) => option === selected) : -1
-  );
+  const liRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
-    if (listRef.current && selectedIndex >= 0) {
-      const itemHeight = 40; // Hauteur approximative d'un <li>, ajustez si nécessaire
-      const scrollPosition = selectedIndex * itemHeight;
+    if (listRef.current?.scroll && liRef.current) {
       listRef.current.scroll({
-        top: scrollPosition,
-        behavior: "smooth", // Défilement fluide
+        top: liRef.current.offsetTop,
+        behavior: "instant",
       });
     }
-  }, [selectedIndex]);
+  }, [selected]);
 
   return (
     <ul
@@ -36,9 +33,9 @@ export default function DropdownMenuList({
       {options.map((option, index) => (
         <li
           role="option"
+          ref={option === selected ? liRef : undefined}
           key={index}
           onClick={() => {
-            setSelectedIndex(index);
             onSelect(option);
           }}
           className={`p-2 cursor-pointer ${

@@ -50,11 +50,13 @@ export default function DropdownMenu({
     }
     const currentIndex = selectedOption
       ? options.findIndex((option) => option === selectedOption)
-      : 0;
+      : -1;
 
     const newIndex =
       orientation === "previous"
-        ? (currentIndex - 1 + options.length) % options.length
+        ? currentIndex === -1
+          ? options.length - 1
+          : (currentIndex - 1 + options.length) % options.length
         : (currentIndex + 1) % options.length;
 
     setSelectedOption(options[newIndex]);
@@ -84,6 +86,8 @@ export default function DropdownMenu({
 
       case "Enter": {
         event.preventDefault();
+        if (!selectedOption?.value) return;
+        onSelect(selectedOption.value);
         setTimeout(() => {
           handleClose();
         }, 0);

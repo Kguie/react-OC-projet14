@@ -119,39 +119,58 @@ describe("DropdownMenu Component", () => {
     );
   });
 
-  //   it("highlights the correct option when navigating with keyboard", async () => {
-  //     renderDropdownMenu();
-  //     const input = screen.getByRole("textbox");
-  //     await userEvent.click(input);
+  it("highlights the correct option when navigating with keyboard", async () => {
+    renderDropdownMenu();
+    const input = screen.getByRole("textbox");
+    await userEvent.click(input);
 
-  //     await userEvent.keyboard("{ArrowDown}");
-  //     expect(screen.getByText("Option 1")).toHaveClass("bg-blue-500");
+    await userEvent.keyboard("{ArrowDown}");
+    expect(screen.getByText("Option 1")).toHaveClass("bg-blue-500");
 
-  //     await userEvent.keyboard("{ArrowDown}");
-  //     expect(screen.getByText("Option 2")).toHaveClass("bg-blue-500");
+    await userEvent.keyboard("{ArrowDown}");
+    expect(screen.getByText("Option 2")).toHaveClass("bg-blue-500");
 
-  //     await userEvent.keyboard("{ArrowUp}");
-  //     expect(screen.getByText("Option 1")).toHaveClass("bg-blue-500");
-  //   });
+    await userEvent.keyboard("{ArrowUp}");
+    expect(screen.getByText("Option 1")).toHaveClass("bg-blue-500");
+  });
 
-  //   it("selects the highlighted option with Enter", async () => {
-  //     renderDropdownMenu();
-  //     const input = screen.getByRole("textbox");
-  //     await userEvent.click(input);
+  it("selects the highlighted option with Enter", async () => {
+    renderDropdownMenu();
+    const input = screen.getByRole("textbox");
+    await userEvent.click(input);
 
-  //     await userEvent.keyboard("{ArrowDown}");
-  //     await userEvent.keyboard("{Enter}");
+    await userEvent.keyboard("{ArrowDown}");
+    await userEvent.keyboard("{Enter}");
 
-  //     expect(onSelectMock).toHaveBeenCalledWith("option1");
-  //     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  //   });
+    expect(screen.getByRole("textbox")).toHaveValue("Option 1");
+    await waitFor(
+      () => {
+        const dropdown = screen.getByTestId("dropdown");
+        expect(dropdown).toHaveClass("opacity-0");
+      },
+      { timeout: 300 }
+    );
+  });
 
-  //   it("closes the dropdown menu when Escape is pressed", async () => {
-  //     renderDropdownMenu();
-  //     const input = screen.getByRole("textbox");
-  //     await userEvent.click(input);
+  it("closes the dropdown menu when Escape is pressed", async () => {
+    renderDropdownMenu();
+    const input = screen.getByRole("textbox");
+    await userEvent.click(input);
+    await waitFor(
+      () => {
+        const dropdown = screen.getByTestId("dropdown");
+        expect(dropdown).toHaveClass("opacity-100");
+      },
+      { timeout: 300 }
+    );
 
-  //     await userEvent.keyboard("{Escape}");
-  //     expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
-  //   });
+    await userEvent.keyboard("{Escape}");
+    await waitFor(
+      () => {
+        const dropdown = screen.getByTestId("dropdown");
+        expect(dropdown).toHaveClass("opacity-0");
+      },
+      { timeout: 300 }
+    );
+  });
 });
