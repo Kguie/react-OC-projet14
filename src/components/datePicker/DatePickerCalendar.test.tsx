@@ -89,6 +89,6 @@ describe("DatePickerCalendar", () => {
     const selectedDayButton = screen.getByText(
       selectedDate.getDate().toString()
     );
-    expect(selectedDayButton).toHaveClass("bg-blue-500 text-white");
+    expect(selectedDayButton).toHaveClass("bg-primary text-white");
   });
 });

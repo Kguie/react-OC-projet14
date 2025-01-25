@@ -125,13 +125,13 @@ describe("DropdownMenu Component", () => {
     await userEvent.click(input);
 
     await userEvent.keyboard("{ArrowDown}");
-    expect(screen.getByText("Option 1")).toHaveClass("bg-blue-500");
+    expect(screen.getByText("Option 1")).toHaveClass("bg-primary");
 
     await userEvent.keyboard("{ArrowDown}");
-    expect(screen.getByText("Option 2")).toHaveClass("bg-blue-500");
+    expect(screen.getByText("Option 2")).toHaveClass("bg-primary");
 
     await userEvent.keyboard("{ArrowUp}");
-    expect(screen.getByText("Option 1")).toHaveClass("bg-blue-500");
+    expect(screen.getByText("Option 1")).toHaveClass("bg-primary");
   });
 
   it("selects the highlighted option with Enter", async () => {

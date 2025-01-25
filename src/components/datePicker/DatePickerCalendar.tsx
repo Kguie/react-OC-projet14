@@ -88,7 +88,7 @@ export default function DatePickerCalendar({
               }}
               className={`p-2 rounded-full text-center ${
                 isSelected
-                  ? "bg-blue-500 text-white"
+                  ? "bg-primary text-white"
                   : isToday
                   ? "bg-gray-200"
                   : "bg-white"

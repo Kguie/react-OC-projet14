@@ -18,7 +18,7 @@ export default function PageCardHead({
       <h2 className="text-2xl font-bold">{title}</h2>
       <Link
         to={to}
-        className="text-blue-500 hover:underline  transition-colors duration-200 text-end"
+        className="text-primary hover:underline  transition-colors duration-200 text-end"
         aria-label={`Go to ${label}`}>
         {label}
       </Link>

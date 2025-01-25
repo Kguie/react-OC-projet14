@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import Separator from "../Separator";
 import CreateEmployeeFormInputText from "./CreateEmployeeFormInputText";
 import CreateEmployeeFormInputSelect from "./CreateEmployeeFormInputSelect";
 import CreateEmployeeFormInputDate from "./CreateEmployeeFormInputDate";
+import Button from "../Button";
+import CreateEmployeeFormModal from "./CreateEmployeeFormModal";
 
 export type CreateEmployeeFormData = {
   firstName: string;
@@ -17,7 +20,9 @@ export type CreateEmployeeFormData = {
   department: string;
 };
 
-export default function CreateEmployeeForm(): React.ReactElement {
+export default function CreateEmployeeForm(): React.ReactNode {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const {
     handleSubmit,
     control,
@@ -29,93 +34,100 @@ export default function CreateEmployeeForm(): React.ReactElement {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      id="create-employee"
-      className="space-y-4 flex flex-col gap-6">
-      <fieldset className="space-y-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <CreateEmployeeFormInputText
-            name="firstName"
-            label="First Name"
-            control={control}
-            errors={errors}
-          />
-          <CreateEmployeeFormInputText
-            name="lastName"
-            label="Last Name"
-            control={control}
-            errors={errors}
-          />
-        </div>
+    <>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        id="create-employee"
+        className="space-y-4 flex flex-col gap-6">
+        <fieldset className="space-y-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <CreateEmployeeFormInputText
+              name="firstName"
+              label="First Name"
+              control={control}
+              errors={errors}
+            />
+            <CreateEmployeeFormInputText
+              name="lastName"
+              label="Last Name"
+              control={control}
+              errors={errors}
+            />
+          </div>
 
-        <div className="flex flex-col gap-4">
-          <CreateEmployeeFormInputDate
-            name="dateOfBirth"
-            label="Date Of Birth"
-            control={control}
-            errors={errors}
-          />
-          <CreateEmployeeFormInputDate
-            name="startDate"
-            label="Start Date"
-            control={control}
-            errors={errors}
-          />
-        </div>
-      </fieldset>
-      {/* Address */}
-      <Separator />
-      <fieldset className="space-y-4 ">
-        <legend className="text-gray-800 font-semibold">Address</legend>
-        <div className="flex flex-col md:flex-row gap-4">
-          <CreateEmployeeFormInputText
-            name="street"
-            label="Street"
-            control={control}
-            errors={errors}
-          />
-          <CreateEmployeeFormInputText
-            name="city"
-            label="City"
-            control={control}
-            errors={errors}
-          />
-        </div>
-        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col gap-4">
+            <CreateEmployeeFormInputDate
+              name="dateOfBirth"
+              label="Date Of Birth"
+              control={control}
+              errors={errors}
+            />
+            <CreateEmployeeFormInputDate
+              name="startDate"
+              label="Start Date"
+              control={control}
+              errors={errors}
+            />
+          </div>
+        </fieldset>
+        {/* Address */}
+        <Separator />
+        <fieldset className="space-y-4 ">
+          <legend className="text-gray-800 font-semibold">Address</legend>
+          <div className="flex flex-col md:flex-row gap-4">
+            <CreateEmployeeFormInputText
+              name="street"
+              label="Street"
+              control={control}
+              errors={errors}
+            />
+            <CreateEmployeeFormInputText
+              name="city"
+              label="City"
+              control={control}
+              errors={errors}
+            />
+          </div>
+          <div className="flex flex-col md:flex-row gap-4">
+            <CreateEmployeeFormInputSelect
+              name="state"
+              label="State"
+              control={control}
+              errors={errors}
+              options={states}
+            />
+            <CreateEmployeeFormInputText
+              name="zipCode"
+              label="Zip Code"
+              control={control}
+              errors={errors}
+            />
+          </div>
+        </fieldset>
+        <Separator />
+
+        <fieldset className="space-y-4 ">
           <CreateEmployeeFormInputSelect
-            name="state"
-            label="State"
+            name="department"
+            label="Department"
             control={control}
             errors={errors}
-            options={states}
+            options={departments}
           />
-          <CreateEmployeeFormInputText
-            name="zipCode"
-            label="Zip Code"
-            control={control}
-            errors={errors}
-          />
-        </div>
-      </fieldset>
-      <Separator />
-
-      <fieldset className="space-y-4 ">
-        <CreateEmployeeFormInputSelect
-          name="department"
-          label="Department"
-          control={control}
-          errors={errors}
-          options={departments}
+        </fieldset>
+        {/* Submit Button */}
+        <Button
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          title="Save"
         />
-      </fieldset>
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Save
-      </button>
-    </form>
+      </form>
+      <CreateEmployeeFormModal
+        isOpen={isModalOpen}
+        close={() => setIsModalOpen(false)}
+        isError={false}
+      />
+    </>
   );
 }
 

@@ -16,6 +16,7 @@ export default function DropdownMenuList({
   const listRef = useRef<HTMLUListElement>(null);
   const liRef = useRef<HTMLLIElement>(null);
 
+  // Focus on selected option
   useEffect(() => {
     if (listRef.current?.scroll && liRef.current) {
       listRef.current.scroll({
@@ -39,7 +40,7 @@ export default function DropdownMenuList({
             onSelect(option);
           }}
           className={`p-2 cursor-pointer ${
-            selected?.value === option.value ? "bg-blue-500 text-white" : ""
+            selected?.value === option.value ? "bg-primary text-white" : ""
           } hover:bg-gray-200 hover:text-black`}>
           {option.label}
         </li>
