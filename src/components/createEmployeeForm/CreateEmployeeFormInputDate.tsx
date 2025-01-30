@@ -26,10 +26,15 @@ export default function CreateEmployeeFormTextInput({
       <Controller
         name={name}
         control={control}
-        rules={{ required: `${label} is required` }}
+        rules={{
+          required: `${label} is required`,
+          validate: (value) =>
+            (value !== null && value !== undefined) ||
+            "Une date doit être sélectionnée",
+        }}
         render={({ field }) => (
           <DatePicker
-            selectedDate={field.value}
+            selectedDate={field.value || null}
             onDateChange={field.onChange}
           />
         )}

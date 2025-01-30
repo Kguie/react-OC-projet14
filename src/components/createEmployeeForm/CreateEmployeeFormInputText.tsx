@@ -4,7 +4,7 @@ import { CreateEmployeeFormData } from "./CreateEmployeeForm";
 import { formatLabelToKebabCase } from "../../utils/utils";
 
 export type CreateEmployeeFormInputTextProps = {
-  name: "firstName" | "lastName" | "street" | "city" | "zipCode";
+  name: "firstName" | "lastName" | "street" | "city";
   label: string;
   control: Control<CreateEmployeeFormData>;
   errors: FieldErrors<CreateEmployeeFormData>;
@@ -26,17 +26,21 @@ export default function CreateEmployeeFormInputText({
         name={name}
         control={control}
         rules={{ required: `${label} is required` }}
-        render={({ field }) => (
-          <input
-            type="text"
-            id={kebabCaseLabel}
-            required
-            className={`border rounded-md ${
-              errors[name] ? "border-red-500" : "border-gray-300"
-            } p-2`}
-            {...field}
-          />
-        )}
+        render={({ field }) => {
+          const { value, ...restField } = field;
+          return (
+            <input
+              type="text"
+              id={kebabCaseLabel}
+              required
+              value={value ?? ""}
+              className={`border rounded-md ${
+                errors[name] ? "border-red-500" : "border-gray-300"
+              } p-2`}
+              {...restField}
+            />
+          );
+        }}
       />
       {errors[name] && <p className="text-red-500">{errors[name]?.message}</p>}
     </div>

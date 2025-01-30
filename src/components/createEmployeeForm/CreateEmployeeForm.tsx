@@ -7,6 +7,7 @@ import CreateEmployeeFormInputSelect from "./CreateEmployeeFormInputSelect";
 import CreateEmployeeFormInputDate from "./CreateEmployeeFormInputDate";
 import Button from "../Button";
 import CreateEmployeeFormModal from "./CreateEmployeeFormModal";
+import CreateEmployeeFormInputNumber from "./CreateEmployeeFormInputNumber";
 
 export type CreateEmployeeFormData = {
   firstName: string;
@@ -16,7 +17,7 @@ export type CreateEmployeeFormData = {
   street: string;
   city: string;
   state: string;
-  zipCode: string;
+  zipCode: number;
   department: string;
 };
 
@@ -27,7 +28,9 @@ export default function CreateEmployeeForm(): React.ReactNode {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<CreateEmployeeFormData>();
+  } = useForm<CreateEmployeeFormData>({
+    mode: "onBlur",
+  });
 
   const onSubmit = (data: CreateEmployeeFormData) => {
     console.log("Employee Data:", data);
@@ -96,7 +99,7 @@ export default function CreateEmployeeForm(): React.ReactNode {
               errors={errors}
               options={states}
             />
-            <CreateEmployeeFormInputText
+            <CreateEmployeeFormInputNumber
               name="zipCode"
               label="Zip Code"
               control={control}
@@ -116,11 +119,7 @@ export default function CreateEmployeeForm(): React.ReactNode {
           />
         </fieldset>
         {/* Submit Button */}
-        <Button
-          type="button"
-          onClick={() => setIsModalOpen(true)}
-          title="Save"
-        />
+        <Button type="submit" title="Save" />
       </form>
       <CreateEmployeeFormModal
         isOpen={isModalOpen}

@@ -1,0 +1,142 @@
+[
+    {
+        "id": "c67ab8a7",
+        "firstName": "Tony",
+        "lastName": "Stark",
+        "dateOfBirth": "1970-05-29",
+        "startDate": "2000-10-02",
+        "department": "Engineering",
+        "address": {
+            "street": "1 Stark Tower",
+            "city": "New York",
+            "state": "New York",
+            "zipCode": "10001"
+        }
+    },
+    {
+        "id": "b72fc9d4",
+        "firstName": "Steve",
+        "lastName": "Rogers",
+        "dateOfBirth": "1918-07-04",
+        "startDate": "2012-05-04",
+        "department": "Human Resources",
+        "address": {
+            "street": "569 Brooklyn Ave",
+            "city": "Brooklyn",
+            "state": "New York",
+            "zipCode": "11201"
+        }
+    },
+    {
+        "id": "f45df3a9",
+        "firstName": "Natasha",
+        "lastName": "Romanoff",
+        "dateOfBirth": "1984-11-22",
+        "startDate": "2010-04-28",
+        "department": "Legal",
+        "address": {
+            "street": "742 Evergreen Terrace",
+            "city": "Chicago",
+            "state": "Illinois",
+            "zipCode": "60601"
+        }
+    },
+    {
+        "id": "e98ab6c3",
+        "firstName": "Bruce",
+        "lastName": "Banner",
+        "dateOfBirth": "1969-12-18",
+        "startDate": "2008-06-13",
+        "department": "Engineering",
+        "address": {
+            "street": "445 Gamma Drive",
+            "city": "San Francisco",
+            "state": "California",
+            "zipCode": "94103"
+        }
+    },
+    {
+        "id": "a23bc8f1",
+        "firstName": "Clint",
+        "lastName": "Barton",
+        "dateOfBirth": "1971-01-07",
+        "startDate": "2011-04-21",
+        "department": "Sales",
+        "address": {
+            "street": "89 Hawkeye Lane",
+            "city": "Des Moines",
+            "state": "Iowa",
+            "zipCode": "50309"
+        }
+    },
+    {
+        "id": "d56ea9b7",
+        "firstName": "Thor",
+        "lastName": "Odinson",
+        "dateOfBirth": "1983-05-20",
+        "startDate": "2011-05-06",
+        "department": "Marketing",
+        "address": {
+            "street": "1500 Thunder Road",
+            "city": "Austin",
+            "state": "Texas",
+            "zipCode": "73301"
+        }
+    },
+    {
+        "id": "g87cb2e4",
+        "firstName": "Wanda",
+        "lastName": "Maximoff",
+        "dateOfBirth": "1989-02-10",
+        "startDate": "2015-05-01",
+        "department": "Legal",
+        "address": {
+            "street": "321 Hex Street",
+            "city": "Boston",
+            "state": "Massachusetts",
+            "zipCode": "02108"
+        }
+    },
+    {
+        "id": "h92fd1a3",
+        "firstName": "Pietro",
+        "lastName": "Maximoff",
+        "dateOfBirth": "1989-02-10",
+        "startDate": "2015-05-01",
+        "department": "Sales",
+        "address": {
+            "street": "456 Speed Lane",
+            "city": "Miami",
+            "state": "Florida",
+            "zipCode": "33101"
+        }
+    },
+    {
+        "id": "i03de7c5",
+        "firstName": "T'Challa",
+        "lastName": "Udaku",
+        "dateOfBirth": "1977-11-28",
+        "startDate": "2016-02-16",
+        "department": "Human Resources",
+        "address": {
+            "street": "88 Panther Way",
+            "city": "Atlanta",
+            "state": "Georgia",
+            "zipCode": "30301"
+        }
+    },
+    {
+        "id": "j84ab5d9",
+        "firstName": "Peter",
+        "lastName": "Parker",
+        "dateOfBirth": "2001-08-10",
+        "startDate": "2016-04-12",
+        "department": "Marketing",
+        "address": {
+            "street": "20 Ingram Street",
+            "city": "Queens",
+            "state": "New York",
+            "zipCode": "11375"
+        }
+    }
+]
