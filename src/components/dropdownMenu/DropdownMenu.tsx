@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { Noop } from "react-hook-form";
 
 import DropdownMenuList from "./DropdownMenuList";
 
@@ -7,6 +8,9 @@ type DropdownMenuProps = {
   selected: DropdownMenuOption["value"] | null;
   onSelect: (option: DropdownMenuOption["value"]) => void;
   options: DropdownMenuOption[];
+  controlOnBlur?: Noop;
+  error?: boolean;
+  required?: boolean;
 };
 
 export type DropdownMenuOption = { value: string; label?: string };
@@ -15,6 +19,9 @@ export default function DropdownMenu({
   selected,
   onSelect,
   options,
+  controlOnBlur,
+  error,
+  required,
 }: DropdownMenuProps): React.ReactElement {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [position, setPosition] = useState<"top" | "bottom">("bottom");
@@ -66,6 +73,7 @@ export default function DropdownMenu({
     setSelectedOption(option);
     onSelect(option.value);
     handleClose();
+    if (controlOnBlur && error) controlOnBlur();
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -99,7 +107,17 @@ export default function DropdownMenu({
         break;
 
       default:
-        event.preventDefault();
+        if (/^[a-zA-Z]$/.test(event.key)) {
+          const foundOption = options.find(({ value }) =>
+            value.toLowerCase().startsWith(event.key.toLowerCase())
+          );
+
+          if (foundOption) {
+            setSelectedOption(foundOption);
+          }
+        } else {
+          event.preventDefault();
+        }
         break;
     }
   }
@@ -126,22 +144,34 @@ export default function DropdownMenu({
   }
 
   return (
-    <div onBlur={handleBlur} className="relative flex flex-1 cursor-pointer">
+    <div onBlur={handleBlur} className="relative flex cursor-pointer">
       <input
         ref={inputRef}
         onKeyDown={handleKeyDown}
         type="text"
+        onBlur={controlOnBlur}
+        required={required}
         value={
+          selectedOption?.label || selectedOption?.value || "Select your option"
+        }
+        title={
           selectedOption?.label || selectedOption?.value || "Select your option"
         }
         onClick={() => {
           if (isDropdownOpen) handleClose();
           else handleOpenDropdown();
         }}
-        className="border rounded-md border-gray-300 p-2 flex-1 cursor-pointer"
+        className={`text-white w-full border rounded-md p-2 cursor-pointer truncate ${
+          error ? "border-red-500" : "border-gray-300"
+        }`}
         readOnly
       />
-      <InputIcon isOpen={isDropdownOpen} />
+      <DisplayInput
+        value={
+          selectedOption?.label || selectedOption?.value || "Select your option"
+        }
+        isOpen={isDropdownOpen}
+      />
       <div
         data-testid="dropdown"
         onMouseDown={(e) => e.preventDefault()}
@@ -165,8 +195,17 @@ export default function DropdownMenu({
   );
 }
 
-const InputIcon = ({ isOpen }: { isOpen: boolean }) => (
-  <div className="absolute w-full h-full flex items-center justify-end pr-2 pointer-events-none">
+const DisplayInput = ({
+  value,
+  isOpen,
+}: {
+  value: string;
+  isOpen: boolean;
+}) => (
+  <div className="absolute  w-full h-full flex items-center p-2 justify-between pointer-events-none">
+    <div className="flex flex-1 max-w-[80%]">
+      <p className="truncate">{value}</p>
+    </div>
     <div
       className={`transition-transform duration-300 ${
         isOpen ? "rotate-180" : "rotate-0"

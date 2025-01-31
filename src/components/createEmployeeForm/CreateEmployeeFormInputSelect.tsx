@@ -29,13 +29,19 @@ export default function CreateEmployeeFormTextInput({
         name={name}
         control={control}
         rules={{ required: `${label} is required` }}
-        render={({ field }) => (
-          <DropdownMenu
-            selected={field.value}
-            onSelect={field.onChange}
-            options={options}
-          />
-        )}
+        render={({ field }) => {
+          const { value, onChange, onBlur } = field;
+          return (
+            <DropdownMenu
+              selected={value}
+              onSelect={onChange}
+              options={options}
+              controlOnBlur={onBlur}
+              error={!!errors[name]}
+              required
+            />
+          );
+        }}
       />
       {errors[name] && <p className="text-red-500">{errors[name]?.message}</p>}
     </div>

@@ -43,11 +43,13 @@ export default function CreateEmployeeFormInputNumber({
       <Controller
         name={name}
         control={control}
-        rules={{ required: `${label} is required` }}
+        rules={{
+          required: `${label} is required`,
+          validate: (value) => value !== "00000" || "Select a valid zip code",
+        }}
         render={({ field }) => {
-          const { onChange, ref, value } = field;
+          const { onChange, value, onBlur, ref } = field;
 
-          // Évite l'erreur en s'assurant que `value` n'est jamais `undefined`
           if (value === undefined || value === null) {
             formatValue("0", onChange);
           }
@@ -60,7 +62,7 @@ export default function CreateEmployeeFormInputNumber({
               onKeyDown={(e) => {
                 if (e.key === "ArrowUp" || e.key === "ArrowDown") {
                   e.preventDefault();
-                  let newValue = value;
+                  let newValue = parseInt(value);
 
                   if (e.key === "ArrowUp" && newValue < 99999) {
                     newValue++;
@@ -89,6 +91,8 @@ export default function CreateEmployeeFormInputNumber({
               onBlur={(e) => {
                 const val = e.target.value.slice(0, 5);
                 formatValue(val, onChange);
+                onBlur();
+                console.log(value);
               }}
               onChange={(e) => {
                 const val = e.target.value.slice(0, 5);
@@ -101,6 +105,7 @@ export default function CreateEmployeeFormInputNumber({
                 } else {
                   formatValue(val, onChange);
                 }
+                if (errors[name]) onBlur();
               }}
               required
               className={`border rounded-md ${

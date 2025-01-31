@@ -17,7 +17,7 @@ export type CreateEmployeeFormData = {
   street: string;
   city: string;
   state: string;
-  zipCode: number;
+  zipCode: string;
   department: string;
 };
 
@@ -31,10 +31,9 @@ export default function CreateEmployeeForm(): React.ReactNode {
   } = useForm<CreateEmployeeFormData>({
     mode: "onBlur",
   });
-
-  const onSubmit = (data: CreateEmployeeFormData) => {
-    console.log("Employee Data:", data);
-  };
+  function onSubmit(data: CreateEmployeeFormData) {
+    console.log("Données du formulaire validé :", data);
+  }
 
   return (
     <>

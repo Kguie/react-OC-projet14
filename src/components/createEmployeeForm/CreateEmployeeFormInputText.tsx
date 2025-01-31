@@ -30,6 +30,7 @@ export default function CreateEmployeeFormInputText({
           const { value, ...restField } = field;
           return (
             <input
+              {...restField}
               type="text"
               id={kebabCaseLabel}
               required
@@ -37,7 +38,6 @@ export default function CreateEmployeeFormInputText({
               className={`border rounded-md ${
                 errors[name] ? "border-red-500" : "border-gray-300"
               } p-2`}
-              {...restField}
             />
           );
         }}

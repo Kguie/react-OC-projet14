@@ -26,18 +26,19 @@ export default function CreateEmployeeFormTextInput({
       <Controller
         name={name}
         control={control}
-        rules={{
-          required: `${label} is required`,
-          validate: (value) =>
-            (value !== null && value !== undefined) ||
-            "Une date doit être sélectionnée",
+        rules={{ required: `${label} is required` }}
+        render={({ field }) => {
+          const { value, onChange, onBlur } = field;
+          return (
+            <DatePicker
+              selectedDate={value}
+              onDateChange={onChange}
+              controlOnBlur={onBlur}
+              error={!!errors[name]}
+              required
+            />
+          );
         }}
-        render={({ field }) => (
-          <DatePicker
-            selectedDate={field.value || null}
-            onDateChange={field.onChange}
-          />
-        )}
       />
       {errors[name] && <p className="text-red-500">{errors[name]?.message}</p>}
     </div>

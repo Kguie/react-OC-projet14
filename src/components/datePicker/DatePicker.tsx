@@ -1,5 +1,6 @@
 import { format, parse } from "date-fns";
 import { useRef, useState } from "react";
+import { Noop } from "react-hook-form";
 
 import DatePickerCalendar from "./DatePickerCalendar";
 import {
@@ -10,11 +11,17 @@ import {
 type DatePickerProps = {
   selectedDate: Date | null;
   onDateChange: (date: Date) => void;
+  controlOnBlur?: Noop;
+  error?: boolean;
+  required?: boolean;
 };
 
 export default function DatePicker({
   selectedDate,
   onDateChange,
+  controlOnBlur,
+  error,
+  required,
 }: DatePickerProps): React.ReactElement {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [inputValue, setInputValue] = useState(
@@ -138,6 +145,9 @@ export default function DatePicker({
     setInputValue(format(date, "dd/MM/yyyy"));
     onDateChange(date);
     setIsCalendarOpen(false);
+    if (controlOnBlur && error) {
+      controlOnBlur();
+    }
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
@@ -190,10 +200,14 @@ export default function DatePicker({
         onChange={handleDateInputChange}
         onFocus={handleFocus}
         onClick={handleFocus}
+        onBlur={controlOnBlur}
         onKeyDown={handleKeyDown}
-        className="border rounded-md border-gray-300 p-2 flex-1"
+        className={`border rounded-md border-gray-300 p-2 flex-1 ${
+          error ? "border-red-500" : "border-gray-300"
+        }`}
         placeholder="dd/mm/yyyy"
         maxLength={10}
+        required={required}
       />
 
       {isCalendarOpen && (
