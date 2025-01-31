@@ -124,6 +124,7 @@ export default function CreateEmployeeForm(): React.ReactNode {
         isOpen={isModalOpen}
         close={() => setIsModalOpen(false)}
         isError={false}
+        message=""
       />
     </>
   );

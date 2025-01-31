@@ -10,3 +10,9 @@ export function formatLabelToCamelCase(label: string): string {
 export function formatLabelToKebabCase(label: string): string {
   return label.toLowerCase().split(" ").join("-");
 }
+
+export function generateId(): string {
+  return Math.floor(Math.random() * 0xffffffff)
+    .toString(16)
+    .padStart(8, "0");
+}

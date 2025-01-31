@@ -8,18 +8,16 @@ type CreateEmployeeFormModalProps = {
   isOpen: boolean;
   close: () => void;
   isError: boolean;
+  message: string;
 };
 
 export default function CreateEmployeeFormModal({
   isOpen,
   isError,
   close,
+  message,
 }: CreateEmployeeFormModalProps) {
   const navigate = useNavigate();
-  const message = isError
-    ? "An error occurred"
-    : "The new employee has been added";
-
   const buttonTitle = isError ? "Back" : "View current employees";
   async function buttonClick() {
     if (isError) {

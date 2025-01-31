@@ -92,7 +92,6 @@ export default function CreateEmployeeFormInputNumber({
                 const val = e.target.value.slice(0, 5);
                 formatValue(val, onChange);
                 onBlur();
-                console.log(value);
               }}
               onChange={(e) => {
                 const val = e.target.value.slice(0, 5);
