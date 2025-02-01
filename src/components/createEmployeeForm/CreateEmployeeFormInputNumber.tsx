@@ -57,6 +57,7 @@ export default function CreateEmployeeFormInputNumber({
           return (
             <input
               type="number"
+              data-testid="formNumberInput"
               id={kebabCaseLabel}
               onWheel={(e) => e.currentTarget.blur()}
               onKeyDown={(e) => {

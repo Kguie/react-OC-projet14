@@ -92,7 +92,8 @@ describe("DatePicker Component", () => {
 
     const today = new Date();
     const todayDateButtons = screen.getAllByText(today.getDate().toString());
-    const todayButton = todayDateButtons[todayDateButtons.length - 1];
+    const todayButton =
+      todayDateButtons[today.getDate() < 7 ? 0 : todayDateButtons.length - 1];
 
     await userEvent.click(todayButton);
 

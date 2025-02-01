@@ -156,6 +156,7 @@ export default function DropdownMenu({
       <input
         ref={inputRef}
         onKeyDown={handleKeyDown}
+        data-testid="dropdownInput"
         type="text"
         onBlur={controlOnBlur}
         required={required}

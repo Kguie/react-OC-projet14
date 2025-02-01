@@ -204,6 +204,7 @@ export default function DatePicker({
       <input
         ref={inputRef}
         type="text"
+        data-testid="datePicker"
         value={inputValue}
         onChange={handleDateInputChange}
         onFocus={handleFocus}

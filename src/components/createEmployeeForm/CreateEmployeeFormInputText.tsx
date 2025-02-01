@@ -34,6 +34,7 @@ export default function CreateEmployeeFormInputText({
               type="text"
               id={kebabCaseLabel}
               required
+              data-testid="formTextInput"
               value={value ?? ""}
               className={`border rounded-md ${
                 errors[name] ? "border-red-500" : "border-gray-300"

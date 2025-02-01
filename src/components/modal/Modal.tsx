@@ -24,6 +24,7 @@ export default function Modal({ children, isOpen, close, title }: ModalProps) {
 
   return (
     <div
+      data-testid="modal"
       onClick={close}
       className={`fixed justify-center items-center top-0 left-0 w-screen h-screen bg-black/60 backdrop-blur-md ${
         isOpen ? "flex" : "hidden"
