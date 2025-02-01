@@ -12,11 +12,12 @@ describe("Page Home", () => {
 
     // Check for 7 input elements
     const inputs = screen.getAllByRole("textbox");
-    expect(inputs).toHaveLength(9);
+    expect(inputs).toHaveLength(8);
 
-    // Check for a button
-    const button = screen.getByRole("button");
-    expect(button).toBeInTheDocument();
+    // Check for buttons
+    const buttons = screen.getAllByRole("button");
+    console.log(buttons);
+    expect(buttons).toHaveLength(2);
 
     // Check for a link with "view current" text
     const link = screen.getByRole("link", { name: /view current/i });

@@ -15,7 +15,7 @@ export function useGet<T>(url: string) {
 
         const response = await axios.get(`${url}`);
         if (!response.data) throw new Error("Data not found");
-        setData(response.data?.data);
+        setData(response.data);
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           setError(error.response?.data?.message || error.message);
@@ -61,33 +61,4 @@ export function usePost<P, T>(url: string) {
   }
 
   return { isLoading, error, postData };
-}
-
-export function usePut<P, T>(url: string) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  async function putData(payload: P): Promise<T | undefined> {
-    try {
-      if (!url || !payload) return;
-      setIsLoading(true);
-      setError(null);
-
-      const response = await axios.put(`${url}`, payload);
-      return response.data.body;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        setError(error.response?.data?.message || error.message);
-      } else if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError("An error occurred");
-      }
-      return;
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  return { isLoading, error, putData };
 }

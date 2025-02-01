@@ -1,8 +1,10 @@
-import { formatDate } from "date-fns";
 import { useGet, usePost } from ".";
 import { generateId } from "../../utils";
+import { useEffect, useState } from "react";
+import { useAtom } from "jotai";
+import { employeesAtom } from "../../../store/employeesAtom";
 
-type EmployeeDTO = {
+export type EmployeeDTO = {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
@@ -15,50 +17,53 @@ type EmployeeDTO = {
     zipCode: string;
   };
 };
-type EmployeeProps = EmployeeDTO & {
+export type EmployeeProps = EmployeeDTO & {
   id: string;
 };
 
+const url = "/data/employees.json";
+
 export function useGetEmployees() {
-  return useGet<EmployeeProps[]>("http://localhost:5173/employees");
+  const [, setEmployees] = useAtom(employeesAtom);
+  const { data, isLoading, error } = useGet<EmployeeProps[]>(url);
+  useEffect(() => {
+    if (data) {
+      setEmployees(data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+  return { data, isLoading, error };
 }
 
 export function useCreateEmployee() {
-  const { postData, isLoading, error } = usePost<EmployeeDTO, EmployeeProps>(
-    "http://localhost:5173/employees"
-  );
-  // const dispatch = useAppDispatch();
+  const [employees, setEmployees] = useAtom(employeesAtom);
+  const { isLoading, error } = usePost<EmployeeDTO, EmployeeProps>(url);
+  const [newError, setNewError] = useState<string | null>(null);
 
-  async function handleCreateEmployee(
+  function handleCreateEmployee(
     payload: EmployeeDTO
-  ): Promise<EmployeeProps | undefined> {
-    const {
-      firstName: payloadFirstName,
-      lastName: payloadLastName,
-      dateOfBirth,
-      startDate,
-    } = payload;
-    //Vérification que l'employé n'est pas déjà présent dans la base avec ses noms et prénoms
-    const employees: EmployeeProps[] = [];
-    const isExisting: boolean = employees.some(
+  ): EmployeeProps | undefined {
+    setNewError(null);
+    let newEmployee = undefined;
+
+    // Vérification que l'employé n'existe pas déjà
+    const isExisting = employees.some(
       ({ firstName, lastName }) =>
-        firstName.toLowerCase() === payloadFirstName.toLowerCase().trim() &&
-        lastName.toLowerCase() === payloadLastName.toLowerCase().trim()
+        firstName.toLowerCase() === payload.firstName.toLowerCase() &&
+        lastName.toLowerCase() === payload.lastName.toLowerCase()
     );
-    if (isExisting) throw new Error(`An error occurred`);
+
+    if (isExisting) {
+      setNewError(`An error occurred`);
+      return newEmployee;
+    }
 
     // Payload formaté pour y ajouter un id et transformer les dates vu qu'on utilise un json pour simuler un back
-    const formattedPayload: EmployeeProps = {
-      ...payload,
-      id: generateId(),
-      startDate: formatDate(startDate, "yyyy,MM,dd"),
-      dateOfBirth: formatDate(dateOfBirth, "yyyy,MM,dd"),
-    };
-    const res = await postData(formattedPayload);
-    if (res) {
-      return res;
-    }
-    return;
+    newEmployee = { ...payload, id: generateId() };
+
+    setEmployees([...employees, newEmployee]);
+
+    return newEmployee;
   }
-  return { handleCreateEmployee, isLoading, error };
+  return { handleCreateEmployee, isLoading, error: newError || error };
 }

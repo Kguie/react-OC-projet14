@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
-import { format } from "date-fns";
+import { addMonths, format, subMonths } from "date-fns";
 
 import DatePickerCalendar from "./DatePickerCalendar";
 import { render } from "../../utils/test";
@@ -36,30 +36,26 @@ describe("DatePickerCalendar", () => {
   });
 
   it("navigates to the previous month when the left chevron is clicked", async () => {
-    const today = new Date();
+    let today = new Date();
     renderDatePicker(today);
 
     const prevButton = screen.getAllByRole("button")[0];
     await userEvent.click(prevButton);
 
-    const previousMonth = format(
-      new Date(today.setMonth(today.getMonth() - 1)),
-      "MMMM yyyy"
-    );
+    today = subMonths(today, 1);
+    const previousMonth = format(today, "MMMM yyyy");
     expect(screen.getByText(previousMonth)).toBeInTheDocument();
   });
 
   it("navigates to the next month when the right chevron is clicked", async () => {
-    const today = new Date();
+    let today = new Date();
     renderDatePicker(today);
 
-    const nextButton = screen.getAllByRole("button")[2];
+    const nextButton = screen.getByTestId("nextButton");
     await userEvent.click(nextButton);
 
-    const nextMonth = format(
-      new Date(today.setMonth(today.getMonth() + 1)),
-      "MMMM yyyy"
-    );
+    today = addMonths(today, 1);
+    const nextMonth = format(today, "MMMM yyyy");
     expect(screen.getByText(nextMonth)).toBeInTheDocument();
   });
 
@@ -75,9 +71,8 @@ describe("DatePickerCalendar", () => {
   it("calls onDateChange  when a day is clicked", async () => {
     renderDatePicker();
 
-    const today = new Date();
-    const todayDateButton = screen.getByText(today.getDate().toString());
-    await userEvent.click(todayDateButton);
+    const dateButton = screen.getByText("15");
+    await userEvent.click(dateButton);
 
     expect(onDateChangeMock).toHaveBeenCalled();
   });

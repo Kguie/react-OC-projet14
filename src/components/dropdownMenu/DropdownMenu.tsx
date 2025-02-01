@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { Noop } from "react-hook-form";
 
@@ -142,6 +142,14 @@ export default function DropdownMenu({
   function handleClose() {
     setIsDropdownOpen(false);
   }
+
+  useEffect(() => {
+    const isSame = selectedOption && selected === selectedOption.value;
+    if (!isSame) {
+      setSelectedOption(options.find(({ value }) => value === selected));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
 
   return (
     <div onBlur={handleBlur} className="relative flex cursor-pointer">

@@ -3,11 +3,14 @@ import { BrowserRouter, Route, Routes as RouterRoutes } from "react-router-dom";
 import Home from "../../pages/home/Home";
 import EmployeeList from "../../pages/employeeList/EmployeeList";
 import Error from "../../pages/Error/Error";
+import EmployeesProvider from "../../components/EmployeesProvider";
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
-      <Routes />
+      <EmployeesProvider>
+        <Routes />
+      </EmployeesProvider>
     </BrowserRouter>
   );
 }

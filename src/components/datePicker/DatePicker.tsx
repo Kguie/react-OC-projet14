@@ -1,5 +1,5 @@
 import { format, parse } from "date-fns";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Noop } from "react-hook-form";
 
 import DatePickerCalendar from "./DatePickerCalendar";
@@ -190,6 +190,14 @@ export default function DatePicker({
         break;
     }
   }
+
+  useEffect(() => {
+    const originalDate = selectedDate ? format(selectedDate, "dd/MM/yyyy") : "";
+    if (originalDate !== inputValue) {
+      setInputValue(originalDate);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedDate]);
 
   return (
     <div onBlur={handleBlur} className="relative flex flex-1">

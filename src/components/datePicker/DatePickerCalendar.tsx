@@ -60,7 +60,11 @@ export default function DatePickerCalendar({
             {format(currentMonth, "MMMM yyyy")}
           </p>
         </button>
-        <button type="button" name="next" onClick={nextMonth}>
+        <button
+          data-testid="nextButton"
+          type="button"
+          name="next"
+          onClick={nextMonth}>
           <ChevronRight className="text-gray-600 hover:text-black cursor-pointer" />
         </button>
       </div>

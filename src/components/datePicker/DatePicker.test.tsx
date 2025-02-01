@@ -91,7 +91,9 @@ describe("DatePicker Component", () => {
     await userEvent.click(input);
 
     const today = new Date();
-    const todayButton = screen.getByText(today.getDate().toString());
+    const todayDateButtons = screen.getAllByText(today.getDate().toString());
+    const todayButton = todayDateButtons[todayDateButtons.length - 1];
+
     await userEvent.click(todayButton);
 
     expect(onDateChangeMock).toHaveBeenCalled();

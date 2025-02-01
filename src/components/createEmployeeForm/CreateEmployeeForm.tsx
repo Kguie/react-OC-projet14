@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { formatDate } from "date-fns/format";
 
 import Separator from "../Separator";
 import CreateEmployeeFormInputText from "./CreateEmployeeFormInputText";
@@ -8,6 +9,10 @@ import CreateEmployeeFormInputDate from "./CreateEmployeeFormInputDate";
 import Button from "../Button";
 import CreateEmployeeFormModal from "./CreateEmployeeFormModal";
 import CreateEmployeeFormInputNumber from "./CreateEmployeeFormInputNumber";
+import {
+  EmployeeDTO,
+  useCreateEmployee,
+} from "../../utils/hooks/api/employees";
 
 export type CreateEmployeeFormData = {
   firstName: string;
@@ -24,15 +29,54 @@ export type CreateEmployeeFormData = {
 export default function CreateEmployeeForm(): React.ReactNode {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
+  const { handleCreateEmployee, isLoading, error } = useCreateEmployee();
+
   const {
     handleSubmit,
+    reset,
     control,
+    getValues,
     formState: { errors },
   } = useForm<CreateEmployeeFormData>({
     mode: "onBlur",
   });
   function onSubmit(data: CreateEmployeeFormData) {
-    console.log("Données du formulaire validé :", data);
+    const {
+      firstName,
+      lastName,
+      dateOfBirth,
+      startDate,
+      department,
+      street,
+      city,
+      state,
+      zipCode,
+    } = data;
+    const payload: EmployeeDTO = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      startDate: formatDate(startDate, "yyyy-MM-dd"),
+      dateOfBirth: formatDate(dateOfBirth, "yyyy-MM-dd"),
+      department,
+      address: {
+        city: city.trim(),
+        state,
+        street: street.trim(),
+        zipCode,
+      },
+    };
+    try {
+      handleCreateEmployee(payload);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsModalOpen(true);
+    }
+  }
+
+  function handleCloseModal() {
+    if (!error) reset();
+    setIsModalOpen(false);
   }
 
   return (
@@ -118,13 +162,18 @@ export default function CreateEmployeeForm(): React.ReactNode {
           />
         </fieldset>
         {/* Submit Button */}
-        <Button type="submit" title="Save" />
+        <Button type="submit" title="Save" isLoading={isLoading} />
       </form>
       <CreateEmployeeFormModal
         isOpen={isModalOpen}
-        close={() => setIsModalOpen(false)}
-        isError={false}
-        message=""
+        close={handleCloseModal}
+        isError={!!error}
+        message={
+          error ||
+          `${getValues("firstName")} ${getValues(
+            "lastName"
+          )} has been registered`
+        }
       />
     </>
   );
