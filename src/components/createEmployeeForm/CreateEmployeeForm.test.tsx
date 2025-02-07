@@ -1,9 +1,10 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 
 import CreateEmployeeForm from "./CreateEmployeeForm";
 import { render } from "../../utils/test";
+import * as employeeAPI from "../../utils/hooks/api/employees";
 
 describe("CreateEmployeeForm Component", () => {
   describe("CreateEmployeeFormInputText component", () => {
@@ -112,75 +113,126 @@ describe("CreateEmployeeForm Component", () => {
       await userEvent.type(input, "678");
       expect(input).toHaveValue(12345);
     });
-
-    // it("increments and decrements correctly with arrow keys", async () => {
-    //   render(<CreateEmployeeForm />);
-    //   const input = screen.getAllByTestId("formNumberInput")[0];
-
-    //   await userEvent.click(input);
-    //   await userEvent.keyboard("{ArrowUp}");
-    //   await waitFor(() =>
-    //     expect(screen.getByText("00001")).toBeInTheDocument()
-    //   );
-
-    //   await userEvent.keyboard("{ArrowDown}");
-    //   await waitFor(() => expect(input).toHaveValue(12345));
-    // });
-
-    // it("does not allow values greater than 99999", async () => {
-    //   render(<CreateEmployeeForm />);
-    //   const input = screen.getByLabelText("Zip Code");
-
-    //   await userEvent.type(input, "100000");
-
-    //   await waitFor(() => expect(input).toHaveValue(9999), { timeout: 4000 });
-    // });
-
-    // it("does not allow values less than 1", async () => {
-    //   render(<CreateEmployeeForm />);
-    //   const input = screen.getByLabelText("Zip Code");
-
-    //   userEvent.type(input, "0");
-
-    //   await waitFor(() => expect(input).toHaveValue("00001")); // ✅ Min 1
-    // });
-
-    // it("displays an error message when '00000' is entered", async () => {
-    //   render(<CreateEmployeeForm />);
-    //   const input = screen.getByLabelText("Zip Code");
-
-    //   userEvent.type(input, "00000");
-    //   userEvent.tab();
-
-    //   await waitFor(() => {
-    //     expect(screen.getByText("Select a valid zip code")).toBeInTheDocument(); // ✅ Message d'erreur affiché
-    //   });
-    // });
   });
-  // describe("CreateEmployeeForm validation", () => {
-  //   it("Should display 4 inputs", () => {
-  //     render(<CreateEmployeeForm />);
-  //     const inputs = screen.getAllByTestId("formTextInput");
-  //     expect(inputs).toHaveLength(4);
-  //   });
-  //   it("Should display an error message if left empty", async () => {
-  //     render(<CreateEmployeeForm />);
-  //     const input = screen.getAllByTestId("formTextInput")[0];
-  //     await userEvent.click(input);
 
-  //     await userEvent.tab();
-  //     expect(screen.getAllByTestId("formTextInput")[0]).toHaveClass(
-  //       "border-red-500"
-  //     );
-  //     expect(screen.getByText(/First Name is required/i)).toBeInTheDocument();
-  //   });
-  //   it("Should update value correctly", async () => {
-  //     render(<CreateEmployeeForm />);
-  //     const input = screen.getAllByTestId("formTextInput")[0];
-  //     await userEvent.click(input);
+  describe("CreateEmployeeForm validation", () => {
+    let handleCreateEmployee: ReturnType<typeof vi.fn>;
 
-  //     await userEvent.type(input, "Tony{enter}");
-  //     expect(screen.getAllByTestId("formTextInput")[0]).toHaveValue("Tony");
-  //   });
-  // });
+    beforeEach(() => {
+      handleCreateEmployee = vi.fn();
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+    });
+
+    it("should not call the submit function if all fields are not populated", async () => {
+      render(<CreateEmployeeForm />);
+
+      const submitButton = screen.getByRole("button", { name: "Save" });
+      await userEvent.click(submitButton);
+
+      expect(handleCreateEmployee).not.toHaveBeenCalled();
+
+      expect(screen.getByTestId("modal")).toHaveClass("hidden");
+    });
+
+    it("should call the submit function and open the modal if the form is complete", async () => {
+      vi.spyOn(employeeAPI, "useCreateEmployee").mockReturnValue({
+        handleCreateEmployee,
+        isLoading: false,
+        error: null,
+      });
+      render(<CreateEmployeeForm />);
+
+      await userEvent.type(screen.getByLabelText("First Name"), "John");
+      await userEvent.type(screen.getByLabelText("Last Name"), "Stark");
+      await userEvent.type(screen.getByLabelText("Street"), "Stark Tower");
+      await userEvent.type(screen.getByLabelText("City"), "New York");
+      await userEvent.type(screen.getByLabelText("Zip Code"), "12345");
+
+      const birthInput = screen.getAllByPlaceholderText("dd/mm/yyyy")[0];
+      const startInput = screen.getAllByPlaceholderText("dd/mm/yyyy")[1];
+
+      await userEvent.type(birthInput, "01/01/2000{enter}");
+      await userEvent.type(startInput, "01/01/2023{enter}");
+
+      const selectInputs = screen.getAllByTestId("dropdownInput");
+      const stateInput = selectInputs[0];
+      const departmentInput = selectInputs[1];
+
+      await userEvent.click(stateInput);
+      await userEvent.keyboard("{ArrowDown}");
+      await userEvent.keyboard("{Enter}");
+
+      await userEvent.click(departmentInput);
+      await userEvent.keyboard("{ArrowDown}");
+      await userEvent.keyboard("{Enter}");
+
+      // On clique sur le bouton de soumission
+      const submitButton = screen.getByRole("button", { name: "Save" });
+      await userEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(screen.queryByText(/is required/i)).not.toBeInTheDocument();
+      });
+
+      expect(handleCreateEmployee).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(screen.getByTestId("modal")).toHaveClass("flex");
+        expect(
+          screen.getByText("John Stark has been registered")
+        ).toBeInTheDocument();
+      });
+    });
+
+    it("should display an error message in the modal when handleCreateEmployee fails", async () => {
+      // Mock `useCreateEmployee` pour simuler une erreur
+      vi.spyOn(employeeAPI, "useCreateEmployee").mockReturnValue({
+        handleCreateEmployee,
+        isLoading: false,
+        error: "Failed to create employee",
+      });
+
+      render(<CreateEmployeeForm />);
+
+      await userEvent.type(screen.getByLabelText("First Name"), "John");
+      await userEvent.type(screen.getByLabelText("Last Name"), "Stark");
+      await userEvent.type(screen.getByLabelText("Street"), "Stark Tower");
+      await userEvent.type(screen.getByLabelText("City"), "New York");
+      await userEvent.type(screen.getByLabelText("Zip Code"), "12345");
+
+      const birthInput = screen.getAllByPlaceholderText("dd/mm/yyyy")[0];
+      const startInput = screen.getAllByPlaceholderText("dd/mm/yyyy")[1];
+
+      await userEvent.type(birthInput, "01/01/2000{enter}");
+      await userEvent.type(startInput, "01/01/2023{enter}");
+
+      const selectInputs = screen.getAllByTestId("dropdownInput");
+      const stateInput = selectInputs[0];
+      const departmentInput = selectInputs[1];
+
+      await userEvent.click(stateInput);
+      await userEvent.keyboard("{ArrowDown}");
+      await userEvent.keyboard("{Enter}");
+
+      await userEvent.click(departmentInput);
+      await userEvent.keyboard("{ArrowDown}");
+      await userEvent.keyboard("{Enter}");
+
+      // On clique sur le bouton de soumission
+      const submitButton = screen.getByRole("button", { name: "Save" });
+      await userEvent.click(submitButton);
+
+      expect(handleCreateEmployee).toHaveBeenCalledTimes(1);
+
+      // Vérifie que la modale affiche le message d'erreur
+      await waitFor(() => {
+        expect(screen.getByTestId("modal")).toHaveClass("flex");
+        expect(
+          screen.getByText("Failed to create employee")
+        ).toBeInTheDocument();
+      });
+    });
+  });
 });

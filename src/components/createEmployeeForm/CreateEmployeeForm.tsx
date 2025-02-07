@@ -162,7 +162,12 @@ export default function CreateEmployeeForm(): React.ReactNode {
           />
         </fieldset>
         {/* Submit Button */}
-        <Button type="submit" title="Save" isLoading={isLoading} />
+        <Button
+          data-testid="submit-button"
+          type="submit"
+          title="Save"
+          isLoading={isLoading}
+        />
       </form>
       <CreateEmployeeFormModal
         isOpen={isModalOpen}
