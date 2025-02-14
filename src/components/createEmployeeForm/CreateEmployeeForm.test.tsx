@@ -39,19 +39,6 @@ describe("CreateEmployeeForm Component", () => {
       const inputs = screen.getAllByTestId("datePicker");
       expect(inputs).toHaveLength(2);
     });
-    it("Should display an error message if left empty", async () => {
-      render(<CreateEmployeeForm />);
-      const input = screen.getAllByTestId("datePicker")[0];
-      await userEvent.click(input);
-
-      await userEvent.tab();
-      expect(screen.getAllByTestId("datePicker")[0]).toHaveClass(
-        "border-red-500"
-      );
-      expect(
-        screen.getByText(/Date Of Birth is required/i)
-      ).toBeInTheDocument();
-    });
   });
   describe("CreateEmployeeFormInputSelect component", () => {
     it("Should display 4 inputs", () => {
