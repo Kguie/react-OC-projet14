@@ -111,4 +111,63 @@ describe("DatePicker Component", () => {
     await userEvent.keyboard("{Escape}");
     expect(screen.queryByTestId("calendar")).not.toBeInTheDocument();
   });
+
+  it("increments and decrements the day when ArrowUp and ArrowDown are pressed", async () => {
+    const selectedDate = new Date(2023, 11, 25); // 25 décembre 2023
+    renderDatePicker(selectedDate);
+    const input = screen.getByDisplayValue("25/12/2023") as HTMLInputElement;
+
+    await userEvent.click(input);
+    expect(input.selectionStart).toBe(6);
+
+    // Aller au jour
+    await userEvent.keyboard("{ArrowRight}");
+    expect(input.selectionStart).toBe(0);
+
+    // Augmente le jour
+    await userEvent.keyboard("{ArrowUp}");
+    expect(input).toHaveValue("26/12/2023");
+
+    // Diminue le jour
+    await userEvent.keyboard("{ArrowDown}");
+    expect(input).toHaveValue("25/12/2023");
+  });
+
+  it("increments and decrements the month when ArrowUp and ArrowDown are pressed", async () => {
+    const selectedDate = new Date(2023, 11, 25);
+    renderDatePicker(selectedDate);
+    const input = screen.getByDisplayValue("25/12/2023") as HTMLInputElement;
+
+    await userEvent.click(input);
+    expect(input.selectionStart).toBe(6);
+
+    // Aller au mois
+    await userEvent.keyboard("{ArrowLeft}");
+    expect(input.selectionStart).toBe(3);
+
+    // Augmente le mois
+    await userEvent.keyboard("{ArrowUp}");
+    expect(input).toHaveValue("25/01/2024");
+
+    // Diminue le mois
+    await userEvent.keyboard("{ArrowDown}");
+    expect(input).toHaveValue("25/12/2023");
+  });
+
+  it("increments and decrements the year when ArrowUp and ArrowDown are pressed", async () => {
+    const selectedDate = new Date(2023, 11, 25);
+    renderDatePicker(selectedDate);
+    const input = screen.getByDisplayValue("25/12/2023") as HTMLInputElement;
+
+    await userEvent.click(input);
+    expect(input.selectionStart).toBe(6);
+
+    // Augmente l'année
+    await userEvent.keyboard("{ArrowUp}");
+    expect(input).toHaveValue("25/12/2024");
+
+    // Diminue l'année
+    await userEvent.keyboard("{ArrowDown}");
+    expect(input).toHaveValue("25/12/2023");
+  });
 });

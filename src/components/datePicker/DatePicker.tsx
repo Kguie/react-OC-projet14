@@ -1,4 +1,14 @@
-import { format, parse } from "date-fns";
+import {
+  addDays,
+  addMonths,
+  addYears,
+  format,
+  formatDate,
+  parse,
+  subDays,
+  subMonths,
+  subYears,
+} from "date-fns";
 import { useEffect, useRef, useState } from "react";
 import { Noop } from "react-hook-form";
 
@@ -62,7 +72,9 @@ export default function DatePicker({
     }
     const originalDate = selectedDate ? format(selectedDate, "dd/MM/yyyy") : "";
     if (originalDate !== inputValue) {
-      setInputValue(originalDate);
+      // setInputValue(originalDate);
+      const parsed = parse(inputValue, "dd/MM/yyyy", new Date());
+      onDateChange(parsed);
     }
     setIsCalendarOpen(false);
   }
@@ -125,6 +137,52 @@ export default function DatePicker({
     }, 0);
   }
 
+  /** Handle update day, month or year segment with keyboard arrows */
+  function handleDateArrowUpdate(position: number, direction: "add" | "sub") {
+    const ranges = [
+      { start: 0, end: 2 }, // Day
+      { start: 3, end: 5 }, // Month
+      { start: 6, end: 10 }, // Year
+    ];
+
+    const currentRangeIndex = position <= 1 ? 0 : position <= 4 ? 1 : 2;
+    const parsed = parse(inputValue, "dd/MM/yyyy", new Date());
+
+    switch (currentRangeIndex) {
+      case 0:
+        if (direction === "add") {
+          const newValue = formatDate(addDays(parsed, 1), "dd/MM/yyyy");
+          setInputValue(newValue);
+        } else {
+          const newValue = formatDate(subDays(parsed, 1), "dd/MM/yyyy");
+          setInputValue(newValue);
+        }
+        break;
+      case 1:
+        if (direction === "add") {
+          const newValue = formatDate(addMonths(parsed, 1), "dd/MM/yyyy");
+          setInputValue(newValue);
+        } else {
+          const newValue = formatDate(subMonths(parsed, 1), "dd/MM/yyyy");
+          setInputValue(newValue);
+        }
+        break;
+      case 2:
+        if (direction === "add") {
+          const newValue = formatDate(addYears(parsed, 1), "dd/MM/yyyy");
+          setInputValue(newValue);
+        } else {
+          const newValue = formatDate(subYears(parsed, 1), "dd/MM/yyyy");
+          setInputValue(newValue);
+        }
+        break;
+    }
+    const { start, end } = ranges[currentRangeIndex];
+    setTimeout(() => {
+      inputRef.current?.setSelectionRange(start, end);
+    }, 0);
+  }
+
   /** Handle text generate and select, at focus and click */
   function handleFocus() {
     const position = inputRef.current?.selectionStart || 0;
@@ -154,6 +212,14 @@ export default function DatePicker({
     const position = inputRef.current?.selectionStart || 0;
 
     switch (event.key) {
+      case "ArrowDown":
+        handleDateArrowUpdate(position, "sub");
+        event.preventDefault();
+        break;
+      case "ArrowUp":
+        handleDateArrowUpdate(position, "add");
+        event.preventDefault();
+        break;
       case "ArrowLeft":
         handleDateNavigation(position, "previous");
         event.preventDefault();
