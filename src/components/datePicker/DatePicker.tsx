@@ -3,7 +3,6 @@ import {
   addMonths,
   addYears,
   format,
-  formatDate,
   parse,
   subDays,
   subMonths,
@@ -26,6 +25,14 @@ type DatePickerProps = {
   required?: boolean;
 };
 
+const DATE_SEGMENTS = [
+  { start: 0, end: 2 }, // Day
+  { start: 3, end: 5 }, // Month
+  { start: 6, end: 10 }, // Year
+];
+
+const DATE_FORMAT = "dd/MM/yyyy";
+
 export default function DatePicker({
   selectedDate,
   onDateChange,
@@ -35,7 +42,7 @@ export default function DatePicker({
 }: DatePickerProps): React.ReactElement {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [inputValue, setInputValue] = useState(
-    selectedDate ? format(selectedDate, "dd/MM/yyyy") : ""
+    selectedDate ? format(selectedDate, DATE_FORMAT) : ""
   );
   const [position, setPosition] = useState<"top" | "bottom">("bottom");
 
@@ -49,34 +56,21 @@ export default function DatePicker({
     setIsCalendarOpen(true);
     if (inputRef.current) {
       const rect = inputRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const spaceAbove = rect.top;
-
-      if (spaceBelow < 384 && spaceAbove > 384) {
-        setPosition("top");
-      } else {
-        setPosition("bottom");
-      }
+      setPosition(window.innerHeight - rect.bottom < 384 ? "top" : "bottom");
     }
   }
 
-  /** Handle blur with modal closing and input checking */
   function handleBlur(event: React.FocusEvent<HTMLDivElement>) {
-    const relatedTarget = event.relatedTarget as Node;
     if (
-      relatedTarget &&
-      (inputRef.current?.contains(relatedTarget) ||
-        calendarRef.current?.contains(relatedTarget))
+      event.relatedTarget &&
+      (inputRef.current?.contains(event.relatedTarget) ||
+        calendarRef.current?.contains(event.relatedTarget))
     ) {
       return;
     }
-    const originalDate = selectedDate ? format(selectedDate, "dd/MM/yyyy") : "";
-    if (originalDate !== inputValue) {
-      // setInputValue(originalDate);
-      const parsed = parse(inputValue, "dd/MM/yyyy", new Date());
-      onDateChange(parsed);
-    }
     setIsCalendarOpen(false);
+    const parsed = parse(inputValue, DATE_FORMAT, new Date());
+    onDateChange(parsed);
   }
 
   /** Update the text input date checking that the entered text corresponds to a formatted date */
@@ -96,7 +90,7 @@ export default function DatePicker({
     } else {
       const [currentDay, currentMonth, currentYear] = format(
         new Date(),
-        "dd/MM/yyyy"
+        DATE_FORMAT
       ).split("/");
 
       const formattedValue = [
@@ -116,22 +110,16 @@ export default function DatePicker({
   ) {
     handleDateInputChange();
 
-    const ranges = [
-      { start: 0, end: 2 }, // Day
-      { start: 3, end: 5 }, // Month
-      { start: 6, end: 10 }, // Year
-    ];
-
     const currentRangeIndex = position <= 1 ? 0 : position <= 4 ? 1 : 2;
 
     const nextRangeIndex =
       direction === "next"
-        ? (currentRangeIndex + 1) % ranges.length
+        ? (currentRangeIndex + 1) % DATE_SEGMENTS.length
         : direction === "previous"
-        ? (currentRangeIndex + ranges.length - 1) % ranges.length
+        ? (currentRangeIndex + DATE_SEGMENTS.length - 1) % DATE_SEGMENTS.length
         : currentRangeIndex;
 
-    const { start, end } = ranges[nextRangeIndex];
+    const { start, end } = DATE_SEGMENTS[nextRangeIndex];
     setTimeout(() => {
       inputRef.current?.setSelectionRange(start, end);
     }, 0);
@@ -139,48 +127,26 @@ export default function DatePicker({
 
   /** Handle update day, month or year segment with keyboard arrows */
   function handleDateArrowUpdate(position: number, direction: "add" | "sub") {
-    const ranges = [
-      { start: 0, end: 2 }, // Day
-      { start: 3, end: 5 }, // Month
-      { start: 6, end: 10 }, // Year
-    ];
+    const parsed = parse(inputValue, DATE_FORMAT, new Date());
+    const rangeIndex = position <= 1 ? 0 : position <= 4 ? 1 : 2;
 
-    const currentRangeIndex = position <= 1 ? 0 : position <= 4 ? 1 : 2;
-    const parsed = parse(inputValue, "dd/MM/yyyy", new Date());
+    const updatedDate =
+      rangeIndex === 0
+        ? direction === "add"
+          ? addDays(parsed, 1)
+          : subDays(parsed, 1)
+        : rangeIndex === 1
+        ? direction === "add"
+          ? addMonths(parsed, 1)
+          : subMonths(parsed, 1)
+        : direction === "add"
+        ? addYears(parsed, 1)
+        : subYears(parsed, 1);
 
-    switch (currentRangeIndex) {
-      case 0:
-        if (direction === "add") {
-          const newValue = formatDate(addDays(parsed, 1), "dd/MM/yyyy");
-          setInputValue(newValue);
-        } else {
-          const newValue = formatDate(subDays(parsed, 1), "dd/MM/yyyy");
-          setInputValue(newValue);
-        }
-        break;
-      case 1:
-        if (direction === "add") {
-          const newValue = formatDate(addMonths(parsed, 1), "dd/MM/yyyy");
-          setInputValue(newValue);
-        } else {
-          const newValue = formatDate(subMonths(parsed, 1), "dd/MM/yyyy");
-          setInputValue(newValue);
-        }
-        break;
-      case 2:
-        if (direction === "add") {
-          const newValue = formatDate(addYears(parsed, 1), "dd/MM/yyyy");
-          setInputValue(newValue);
-        } else {
-          const newValue = formatDate(subYears(parsed, 1), "dd/MM/yyyy");
-          setInputValue(newValue);
-        }
-        break;
-    }
-    const { start, end } = ranges[currentRangeIndex];
-    setTimeout(() => {
-      inputRef.current?.setSelectionRange(start, end);
-    }, 0);
+    setInputValue(format(updatedDate, DATE_FORMAT));
+
+    const { start, end } = DATE_SEGMENTS[rangeIndex];
+    setTimeout(() => inputRef.current?.setSelectionRange(start, end), 0);
   }
 
   /** Handle text generate and select, at focus and click */
@@ -188,7 +154,7 @@ export default function DatePicker({
     const position = inputRef.current?.selectionStart || 0;
 
     if (inputValue === "") {
-      setInputValue(format(new Date(), "dd/MM/yyyy"));
+      setInputValue(format(new Date(), DATE_FORMAT));
       setTimeout(() => {
         inputRef.current?.setSelectionRange(0, 2);
       }, 0);
@@ -200,7 +166,7 @@ export default function DatePicker({
 
   /** Update Date on click on Calendar component date */
   function handleCalendarChange(date: Date) {
-    setInputValue(format(date, "dd/MM/yyyy"));
+    setInputValue(format(date, DATE_FORMAT));
     onDateChange(date);
     setIsCalendarOpen(false);
     if (controlOnBlur && error) {
@@ -237,7 +203,7 @@ export default function DatePicker({
       case "Enter": {
         event.preventDefault();
         handleDateInputChange();
-        const parsed = parse(inputValue, "dd/MM/yyyy", new Date());
+        const parsed = parse(inputValue, DATE_FORMAT, new Date());
         onDateChange(parsed);
         setTimeout(() => {
           inputRef.current?.blur();
@@ -258,7 +224,7 @@ export default function DatePicker({
   }
 
   useEffect(() => {
-    const originalDate = selectedDate ? format(selectedDate, "dd/MM/yyyy") : "";
+    const originalDate = selectedDate ? format(selectedDate, DATE_FORMAT) : "";
     if (originalDate !== inputValue) {
       setInputValue(originalDate);
     }
