@@ -7,7 +7,7 @@ export default function EmployeesListTable() {
 
   return (
     <div className="flex bg-red-500 flex-1 overflow-x-auto">
-      <table className="min-w-full bg-white border border-gray-300">
+      <table className="min-w-full bg-white border border-gray-300 ">
         <thead>
           <tr className="bg-gray-200">
             <th className="border px-4 py-2">First Name</th>
