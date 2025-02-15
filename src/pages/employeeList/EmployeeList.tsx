@@ -1,9 +1,10 @@
+import EmployeesListTable from "../../components/EmployeesListTable";
 import PageCard from "../../components/pageCard/PageCard";
 import PageCardHead from "../../components/pageCard/PageCardHead";
 
 export default function EmployeeList(): React.ReactElement {
   return (
-    <PageCard width="lg">
+    <PageCard width="md">
       <PageCardHead
         title={"Current employees"}
         button={{
@@ -11,6 +12,7 @@ export default function EmployeeList(): React.ReactElement {
           to: "/",
         }}
       />
+      <EmployeesListTable />
     </PageCard>
   );
 }
