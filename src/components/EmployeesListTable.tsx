@@ -1,9 +1,36 @@
 import { useAtom } from "jotai";
+import { useMemo } from "react";
+import { format, parse } from "date-fns";
 
 import { employeesAtom } from "../store/employeesAtom";
+import { STATES } from "./data/data";
 
 export default function EmployeesListTable() {
   const [employees] = useAtom(employeesAtom);
+
+  function handleDateConvert(stringDate: string) {
+    const parsed = parse(stringDate, "yyyy-MM-dd", new Date());
+    return format(parsed, "dd/MM/yyyy");
+  }
+
+  const handleFindStateLabel = (stateCode: string) =>
+    STATES.find(({ value }) => value === stateCode)?.label || "";
+
+  const formattedEmployees = useMemo(
+    () =>
+      employees.map((employee) => {
+        return {
+          ...employee,
+          dateOfBirth: handleDateConvert(employee.dateOfBirth),
+          startDate: handleDateConvert(employee.startDate),
+          address: {
+            ...employee.address,
+            state: handleFindStateLabel(employee.address.state),
+          },
+        };
+      }),
+    [employees]
+  );
 
   return (
     <div className="flex bg-red-500 flex-1 overflow-x-auto">
@@ -22,7 +49,7 @@ export default function EmployeesListTable() {
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee) => (
+          {formattedEmployees.map((employee) => (
             <tr key={employee.id} className="hover:bg-gray-100">
               <td className="border px-4 py-2">{employee.firstName}</td>
               <td className="border px-4 py-2">{employee.lastName}</td>

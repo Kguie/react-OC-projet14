@@ -7,7 +7,7 @@ import DropdownMenu from "../dropdownMenu/DropdownMenu";
 export type CreateEmployeeFormTextInputProps = {
   name: "state" | "department";
   label: string;
-  options: { label: string; value: string }[];
+  options: { label?: string; value: string }[];
   control: Control<CreateEmployeeFormData>;
   errors: FieldErrors<CreateEmployeeFormData>;
 };

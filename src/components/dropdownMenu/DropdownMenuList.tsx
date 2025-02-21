@@ -42,7 +42,7 @@ export default function DropdownMenuList({
           className={`p-2 cursor-pointer ${
             selected?.value === option.value ? "bg-primary text-white" : ""
           } hover:bg-gray-200 hover:text-black`}>
-          {option.label}
+          {option.label || option.value}
         </li>
       ))}
     </ul>
