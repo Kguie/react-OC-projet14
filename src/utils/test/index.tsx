@@ -3,7 +3,7 @@ import { MemoryRouter } from "react-router-dom";
 import { ReactNode } from "react";
 
 type WrapperProps = {
-  children: ReactNode; // Accept any valid ReactNode
+  children: ReactNode;
   initialEntries?: string[];
 };
 

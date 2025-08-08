@@ -1,50 +1,146 @@
-# React + TypeScript + Vite
+# WealthHealth Employee Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React application for managing employee records with a clean, responsive interface. This project demonstrates advanced React patterns and state management using modern development tools.
 
-Currently, two official plugins are available:
+## 🌟 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Employee Registration**: Complete form to add new employees with personal and address information
+- **Employee Directory**: View and manage all registered employees in a data table
+- **Responsive Design**: Mobile-friendly interface built with Tailwind CSS
+- **Form Validation**: Comprehensive form validation using React Hook Form
+- **State Management**: Global state management with Jotai
+- **Type Safety**: Full TypeScript implementation for enhanced development experience
+- **Custom Components**: Reusable UI components including date pickers, dropdowns, and modals
+- **Testing**: Comprehensive test suite with Vitest and React Testing Library
 
-## Expanding the ESLint configuration
+## 🚀 Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and optimized builds
+- **Styling**: Tailwind CSS for utility-first styling
+- **Form Management**: React Hook Form for efficient form handling
+- **State Management**: Jotai for atomic state management
+- **Routing**: React Router DOM for client-side navigation
+- **HTTP Client**: Axios for API communications
+- **Testing**: Vitest + React Testing Library + Jest DOM
+- **Icons**: Lucide React for modern icons
+- **Date Handling**: date-fns for date manipulation
 
-- Configure the top-level `parserOptions` property like this:
+## 🛠️ Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Prerequisites
+
+- Node.js (version 16 or higher)
+- npm or yarn package manager
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd wealth-health
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## 📝 Available Scripts
+
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build the application for production
+- `npm run preview` - Preview the production build locally
+- `npm run lint` - Run ESLint for code quality checks
+- `npm test` - Run the test suite with Vitest
+
+## 🏗️ Project Structure
+
+```
+src/
+├── components/           # Reusable UI components
+│   ├── createEmployeeForm/  # Employee creation form components
+│   ├── datePicker/          # Custom date picker components
+│   ├── dropdownMenu/        # Dropdown menu components
+│   ├── modal/               # Modal dialog components
+│   └── ...
+├── pages/                # Application pages/routes
+│   ├── home/               # Employee creation page
+│   ├── employeeList/       # Employee listing page
+│   └── Error/              # Error page
+├── store/                # Global state management
+├── utils/                # Utility functions and hooks
+│   ├── hooks/api/          # API-related hooks
+│   ├── router/             # Routing configuration
+│   └── test/               # Test utilities
+└── main.tsx              # Application entry point
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 🧪 Testing
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+The project includes a comprehensive test suite:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm test -- --watch
+
+# Run tests with coverage
+npm test -- --coverage
 ```
+
+## 🎨 Key Features Implementation
+
+### Custom Components
+- **DatePicker**: Custom date picker with calendar navigation
+- **DropdownMenu**: Accessible dropdown with search functionality
+- **Modal**: Reusable modal component with proper focus management
+- **Form Components**: Typed form inputs with validation
+
+### State Management
+- Uses Jotai for efficient, atomic state management
+- Employee data is managed globally and persisted across routes
+
+### Form Handling
+- React Hook Form integration for performance and validation
+- Custom form components with proper error handling
+- Date validation and formatting with date-fns
+
+## 🔧 Development
+
+### Code Quality
+- ESLint configuration for consistent code style
+- TypeScript for type safety and better development experience
+- Comprehensive testing with React Testing Library
+
+### Performance
+- Vite for fast development server and optimized builds
+- React 18 with concurrent features
+- Efficient re-rendering with proper component structure
+
+## 📦 Build and Deployment
+
+To build the application for production:
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist` directory, ready for deployment to any static hosting service.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is private and not licensed for public use.
