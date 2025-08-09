@@ -50,9 +50,10 @@ export default function EmployeesListTable() {
     [employees]
   );
 
-  return <DataTable data={formattedEmployees} columns={COLS}  >
-    <DataTableSearch iconColor="white" />
-    <DataTableBody />
-    <DataTablePagination />
-  </DataTable>
+  return <div className="overflow-x-auto min-w-[1000px]">
+    <DataTable data={formattedEmployees} columns={COLS}  >
+      <DataTableSearch iconColor="white" />
+      <DataTableBody />
+      <DataTablePagination />
+    </DataTable></div>
 }
