@@ -170,9 +170,8 @@ export default function DropdownMenu({
           if (isDropdownOpen) handleClose();
           else handleOpenDropdown();
         }}
-        className={`text-white w-full border rounded-md p-2 cursor-pointer truncate ${
-          error ? "border-red-500" : "border-gray-300"
-        }`}
+        className={`text-white w-full border rounded-md p-2 cursor-pointer truncate ${error ? "border-red-500" : "border-gray-300"
+          }`}
         readOnly
       />
       <DisplayInput
@@ -185,15 +184,14 @@ export default function DropdownMenu({
         data-testid="dropdown"
         onMouseDown={(e) => e.preventDefault()}
         ref={dropdownRef}
-        className={`absolute w-full z-30 bg-white border border-gray-300 rounded-md shadow-lg transition-transform duration-300 ease-in-out ${
-          position === "top"
-            ? "origin-bottom scale-y-0 opacity-0 bottom-full"
-            : "origin-top scale-y-0 opacity-0 top-full"
-        } ${
-          isDropdownOpen
-            ? "scale-y-100 opacity-100"
-            : "scale-y-0 opacity-0 pointer-events-none"
-        }`}>
+        className={`absolute w-full z-30 bg-white border border-gray-300 rounded-md shadow-lg
+    transition-transform duration-300 ease-in-out
+    ${position === "top" ? "origin-bottom bottom-full" : "origin-top top-full"}
+    ${isDropdownOpen
+            ? "transform scale-y-100 opacity-100"
+            : "transform scale-y-0 opacity-0 pointer-events-none"
+          }`}
+      >
         <DropdownMenuList
           selected={selectedOption}
           onSelect={handleChange}
@@ -216,9 +214,8 @@ const DisplayInput = ({
       <p className="truncate">{value}</p>
     </div>
     <div
-      className={`transition-transform duration-300 ${
-        isOpen ? "rotate-180" : "rotate-0"
-      }`}>
+      className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"
+        }`}>
       <ChevronDown />
     </div>
   </div>
