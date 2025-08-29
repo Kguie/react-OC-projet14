@@ -3,6 +3,22 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "Application HRnet convertie en React pour la gestion des employés",
+  "keywords": [
+    "react",
+    "hrnet",
+    "employee-management",
+    "frontend",
+    "oc-projet14",
+    "openclassrooms",
+    "project 14"
+  ],
+  "author": "Kevin Guieba <https://github.com/Kguie>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kguie/react-OC-projet14.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
