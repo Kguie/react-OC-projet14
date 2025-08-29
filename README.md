@@ -2,7 +2,7 @@
 
 A modern React application for managing employee records with a clean, responsive interface. This project demonstrates advanced React patterns and state management using modern development tools.
 
-## 🌟 Features
+## Features
 
 - **Employee Registration**: Complete form to add new employees with personal and address information
 - **Employee Directory**: View and manage all registered employees in a data table
@@ -13,7 +13,7 @@ A modern React application for managing employee records with a clean, responsiv
 - **Custom Components**: Reusable UI components including date pickers, dropdowns, and modals
 - **Testing**: Comprehensive test suite with Vitest and React Testing Library
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - **Framework**: React 18 with TypeScript
 - **Build Tool**: Vite for fast development and optimized builds
@@ -26,18 +26,18 @@ A modern React application for managing employee records with a clean, responsiv
 - **Icons**: Lucide React for modern icons
 - **Date Handling**: date-fns for date manipulation
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
 
 - Node.js (version 16 or higher)
-- npm or yarn package manager
+- npm package manager
 
-### Installation
+### Setup
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone <https://github.com/Kguie/react-OC-projet14.git>
    cd wealth-health
    ```
 
@@ -53,7 +53,7 @@ A modern React application for managing employee records with a clean, responsiv
 
 4. Open your browser and navigate to `http://localhost:5173`
 
-## 📝 Available Scripts
+## Available Scripts
 
 - `npm run dev` - Start development server with hot reload
 - `npm run build` - Build the application for production
@@ -61,7 +61,7 @@ A modern React application for managing employee records with a clean, responsiv
 - `npm run lint` - Run ESLint for code quality checks
 - `npm test` - Run the test suite with Vitest
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 src/
@@ -83,22 +83,17 @@ src/
 └── main.tsx              # Application entry point
 ```
 
-## 🧪 Testing
+## Testing
 
-The project includes a comprehensive test suite:
+This library is thoroughly tested with **Vitest** and **React Testing Library**:
 
 ```bash
-# Run all tests
-npm test
-
-# Run tests in watch mode
-npm test -- --watch
-
-# Run tests with coverage
-npm test -- --coverage
+npm run test           # watch mode  
+npm run test:run       # single run  
+npm run test:coverage  # with coverage reports  
 ```
 
-## 🎨 Key Features Implementation
+## Key Features Implementation
 
 ### Custom Components
 - **DatePicker**: Custom date picker with calendar navigation
@@ -115,19 +110,19 @@ npm test -- --coverage
 - Custom form components with proper error handling
 - Date validation and formatting with date-fns
 
-## 🔧 Development
+## Development
 
 ### Code Quality
 - ESLint configuration for consistent code style
 - TypeScript for type safety and better development experience
-- Comprehensive testing with React Testing Library
+- Comprehensive testing with Vite Testing Library
 
 ### Performance
 - Vite for fast development server and optimized builds
 - React 18 with concurrent features
 - Efficient re-rendering with proper component structure
 
-## 📦 Build and Deployment
+## Build and Deployment
 
 To build the application for production:
 
@@ -137,10 +132,13 @@ npm run build
 
 The built files will be in the `dist` directory, ready for deployment to any static hosting service.
 
-## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## Authors
 
-## 📄 License
+[GUIEBA Kévin](https://github.com/Kguie/)
 
-This project is private and not licensed for public use.
+
+## License
+
+MIT © [Kevin Guieba](mailto:kevin.guieba@gmail.com)
+

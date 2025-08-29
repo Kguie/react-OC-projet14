@@ -13,7 +13,7 @@ import { STATES } from "./data/data";
 
 const COLS = [
   { key: "firstName", title: "First Name", sortable: true },
-  { key: "lastName", title: "Last Name", sortable: false },
+  { key: "lastName", title: "Last Name", sortable: true },
   { key: "dateOfBirth", title: "Date of Birth", sortable: true },
   { key: "startDate", title: "Start Date", sortable: true },
   { key: "department", title: "Department", sortable: true },
