@@ -27,7 +27,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@kguie/data-table": "^1.0.0",
+    "@kguie/data-table": "^1.0.3",
     "axios": "^1.7.9",
     "jotai": "^2.11.2",
     "lucide-react": "^0.469.0",

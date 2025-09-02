@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Noop } from "react-hook-form";
 
 import DropdownMenuList from "./DropdownMenuList";
@@ -209,14 +209,14 @@ const DisplayInput = ({
   value: string;
   isOpen: boolean;
 }) => (
-  <div className="absolute  w-full h-full flex items-center p-2 justify-between pointer-events-none">
+  <div className="absolute w-full h-full flex items-center p-2 justify-between pointer-events-none">
     <div className="flex flex-1 max-w-[80%]">
       <p className="truncate">{value}</p>
     </div>
-    <div
-      className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"
-        }`}>
-      <ChevronDown />
-    </div>
+    <ChevronRight
+      className={`transition-transform duration-300 ${isOpen ? "rotate-90" : "rotate-0"
+        }`}
+    />
   </div>
 );
+
