@@ -53,7 +53,7 @@ export default function EmployeesListTable() {
   return <div className="overflow-x-auto min-w-[1000px]">
     <DataTable data={formattedEmployees} columns={COLS}  >
       <DataTableSearch iconColor="white" />
-      <DataTableBody />
+      <DataTableBody dense />
       <DataTablePagination />
     </DataTable></div>
 }
